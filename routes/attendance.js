@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Attendance = require("../models/Attendance"); // Mongoose model
+const Attendance = require("../../models/Attendance"); // Mongoose model
 const Student = require("../models/Student");
+
+//controllers
+const { markAttendance } = require("../controllers/attendance.controller");
 
 // @route   POST /api/attendance/mark
 // @desc    Mark daily attendance
