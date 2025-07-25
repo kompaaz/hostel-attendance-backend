@@ -8,13 +8,12 @@ const markAttendance = async (req, res) => {
     return res.status(400).json({ error: "Missing fields" });
 
   try {
-    await Attendance.findOneAndUpdate(
-      { date, ad, type },
-      { $set: { records } },
-      { upsert: true }
-    );
+    const attendance = new Attendance({ ad, type, records });
+    attendance.save();
+
     res.json({ message: "Attendance saved successfully" });
   } catch (err) {
+    console.log("Error in attendance.controller.js \n" + err);
     res.status(500).json({ error: "Failed to save attendance" });
   }
 };
