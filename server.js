@@ -3,16 +3,17 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
-<<<<<<< HEAD
-=======
 // routers
->>>>>>> df86ca21036f2e8ea10e10246648ce4a6fb0d72e
 const authRoutes = require("./routes/auth.route");
 const studentRoutes = require("./routes/students");
 const attendanceRoutes = require("./routes/attendance.route");
 
 const app = express();
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());

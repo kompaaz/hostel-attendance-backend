@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hostel Attendance</title>
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --present: #d1fae5;
+      --absent: #fee2e2;
+      --text-dark: #1f2937;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f4f6;
+      padding: 1rem;
+      color: var(--text-dark);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    #datetime {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #4b5563;
+    }
+
+    .room-card {
+      background: white;
+      margin-bottom: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 1rem;
+    }
+
+    .room-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .student-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .student-card {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .student-name {
+      font-weight: 500;
+    }
+
+    .status-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .status-btn {
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      border: 1px solid transparent;
+      transition: 0.2s;
+    }
+
+    .status-btn.present {
+      background-color: var(--present);
+      color: #065f46;
+    }
+
+    .status-btn.absent {
+      background-color: var(--absent);
+      color: #991b1b;
+    }
+
+    .status-btn.active {
+      border: 2px solid var(--primary);
+    }
+
+    #saveBtn {
+      display: block;
+      margin: 2rem auto 1rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #saveBtn:hover {
+      background: #2563eb;
+    }
+
+    #summary {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .student-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .student-card {
+        flex: 1 1 calc(50% - 1rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>📝 Hostel Attendance</h2>
+    <div id="datetime"></div>
+  </header>
+
+  <div id="attendance-container"></div>
+
+  <button id="saveBtn">✅ Save Attendance</button>
+
+  <div id="summary">Total Present: 0 | Total Absent: 0</div>
+
+  <script>
+    const studentsData = [
+      { room: "101", students: ["Bala", "Arun"] },
+      { room: "102", students: ["Ravi", "Surya"] },
+      { room: "103", students: ["Vimal", "Kumar"] },
+    ];
+
+    const statusMap = {}; // { name: "present" }
+
+    const container = document.getElementById("attendance-container");
+
+    function renderStudents() {
+      container.innerHTML = "";
+      let presentCount = 0;
+      let absentCount = 0;
+
+      studentsData.forEach(({ room, students }) => {
+        const roomCard = document.createElement("div");
+        roomCard.className = "room-card";
+
+        const roomTitle = document.createElement("div");
+        roomTitle.className = "room-title";
+        roomTitle.textContent = `Room ${room}`;
+
+        const studentList = document.createElement("div");
+        studentList.className = "student-list";
+
+        students.forEach((name) => {
+          if (!statusMap[name]) statusMap[name] = "present";
+
+          const card = document.createElement("div");
+          card.className = "student-card";
+
+          const studentName = document.createElement("div");
+          studentName.className = "student-name";
+          studentName.textContent = name;
+
+          const statusBtns = document.createElement("div");
+          statusBtns.className = "status-buttons";
+
+          const pBtn = document.createElement("button");
+          pBtn.textContent = "P";
+          pBtn.className = "status-btn present";
+          if (statusMap[name] === "present") pBtn.classList.add("active");
+
+          const aBtn = document.createElement("button");
+          aBtn.textContent = "A";
+          aBtn.className = "status-btn absent";
+          if (statusMap[name] === "absent") aBtn.classList.add("active");
+
+          pBtn.onclick = () => {
+            statusMap[name] = "present";
+            renderStudents();
+          };
+
+          aBtn.onclick = () => {
+            statusMap[name] = "absent";
+            renderStudents();
+          };
+
+          statusBtns.append(pBtn, aBtn);
+          card.append(studentName, statusBtns);
+          studentList.appendChild(card);
+
+          statusMap[name] === "present" ? presentCount++ : absentCount++;
+        });
+
+        roomCard.append(roomTitle, studentList);
+        container.appendChild(roomCard);
+      });
+
+      document.getElementById("summary").textContent =
+        `Total Present: ${presentCount} | Total Absent: ${absentCount}`;
+    }
+
+    // Save Confirmation
+    document.getElementById("saveBtn").onclick = () => {
+      if (confirm("Are you sure you want to submit today's attendance?")) {
+        alert("✅ Attendance Submitted!");
+        // Add API call or save logic here
+      }
+    };
+
+    // Live DateTime
+    function updateTime() {
+      const now = new Date();
+      const timeStr = now.toLocaleString("en-IN", {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+      document.getElementById("datetime").textContent = timeStr;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    renderStudents();
+  </script>
+</body>
+</html>
