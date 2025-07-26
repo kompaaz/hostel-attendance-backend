@@ -28,11 +28,11 @@ const userLogin = async (req, res) => {
     // ✅ Login success
     res.status(200).json({
       message: "Login successful",
-      //   user: {
-      //     id: user._id,
-      //     role: user.role,
-      //     hall: user.hall || null,
-      //   },
+      // user: {
+      //   id: user._id,
+      //   role: user.role,
+      //   hall: user.hall || null,
+      // },
     });
   } catch (err) {
     console.error("Login Error:", err);
@@ -40,9 +40,4 @@ const userLogin = async (req, res) => {
   }
 };
 
-const middlewareChecker = async (req, res) => {
-  console.log(req.token);
-  console.log("checker is executed");
-  res.send("this is checker file");
-};
-module.exports = { userLogin, middlewareChecker };
+module.exports = { userLogin };
