@@ -1,7 +1,7 @@
 // routes/students.js
 const express = require("express");
 const router = express.Router();
-const verifyToken = require("../middleware/auth");
+const { verifyToken } = require("../middleware/auth.middleware");
 const Student = require("../models/student.model");
 
 // GET all students for a specific AD
