@@ -6,6 +6,9 @@ const { markAttendance } = require("../controllers/attendance.controller");
 const { getStudents } = require("../controllers/student.controller");
 
 // POST /api/attendance/mark
+router.get("/", (req, res) => {
+  res.render("attendance");
+});
 router.post("/mark", markAttendance);
 
 // GET: Fetch all students based on adId
