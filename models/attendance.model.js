@@ -6,10 +6,10 @@ const attendanceSchema = new mongoose.Schema({
   type: String, // "general" or "mass"
   records: [
     {
-      roll: String,
+      accountNumber: String,
       status: String, // "present" or "absent"
     },
   ],
 });
 
-module.exports = mongoose.model("Attendance", attendanceSchema);
+module.exports = mongoose.model("attendance", attendanceSchema);
