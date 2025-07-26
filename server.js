@@ -1,16 +1,18 @@
 require("dotenv").config(); // Load environment variables
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
-const authRoutes = require("./routes/auth");
+// routers
+const authRoutes = require("./routes/auth.route");
 const studentRoutes = require("./routes/students");
-const attendanceRoutes = require("./routes/attendance");
+const attendanceRoutes = require("./routes/attendance.route");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/students", studentRoutes);
