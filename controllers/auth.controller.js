@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/user.model");
 
 const userLogin = async (req, res) => {
   try {
@@ -28,11 +28,11 @@ const userLogin = async (req, res) => {
     // ✅ Login success
     res.status(200).json({
       message: "Login successful",
-      //   user: {
-      //     id: user._id,
-      //     role: user.role,
-      //     hall: user.hall || null,
-      //   },
+      // user: {
+      //   id: user._id,
+      //   role: user.role,
+      //   hall: user.hall || null,
+      // },
     });
   } catch (err) {
     console.error("Login Error:", err);
