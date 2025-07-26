@@ -4,9 +4,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/auth.route");
 const studentRoutes = require("./routes/students");
-const attendanceRoutes = require("./routes/attendance");
+const attendanceRoutes = require("./routes/attendance.route");
 
 const app = express();
 app.use(cors());
