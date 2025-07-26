@@ -93,28 +93,39 @@
 
         <button type="submit">Login</button>
       </form>
+      <!-- <div>
+        <h1>Rendering Users</h1>
+        <ul>
+          <% users.forEach(user => { %>
+          <li><%= user.name %></li>
+          <li><%= user.room %></li>
+          <li><%= user.community %></li>
+          <hr>
+          <% }) %>
+        </ul>
+      </div> -->
     </div>
 
     <script>
-          function handleLogin(event) {
-            event.preventDefault();
+      function handleLogin(event) {
+        event.preventDefault();
 
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
 
-            const users = {
-              "student1": { password: "1234", redirect: "student_dashboard.html" },
-              "ad1":      { password: "1234", redirect: "ad_dashboard.html" },
-              "director1":{ password: "1234", redirect: "director_dashboard.html" },
-              "admin1":   { password: "1234", redirect: "admin_dashboard.html" }
-            };
-  
-            if (users[username] && users[username].password === password) {
-              window.location.href = users[username].redirect;
-            } else {
-              alert("Invalid username or password");
-            }
-          }
+        const users = {
+          student1: { password: "1234", redirect: "student_dashboard.html" },
+          ad1: { password: "1234", redirect: "ad_dashboard.html" },
+          director1: { password: "1234", redirect: "director_dashboard.html" },
+          admin1: { password: "1234", redirect: "admin_dashboard.html" },
+        };
+
+        if (users[username] && users[username].password === password) {
+          window.location.href = users[username].redirect;
+        } else {
+          alert("Invalid username or password");
+        }
+      }
     </script>
   </body>
 </html>
