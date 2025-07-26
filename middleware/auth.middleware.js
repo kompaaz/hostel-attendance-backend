@@ -1,6 +1,19 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const isUserLoggedIn = async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
+    if (token) {
+      res.redirect("/");
+    }
+    next();
+  } catch (error) {
+    console.log("Error in isUserLoggedIn middleware \n" + error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const verifyToken = (req, res, next) => {
   console.log("came into middleware");
 
@@ -20,4 +33,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports = { verifyToken };
+module.exports = { verifyToken, isUserLoggedIn };
