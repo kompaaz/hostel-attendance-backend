@@ -2,8 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const userLogin = async () => {
-  console.log("req came to login");
+const userLogin = async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -21,7 +20,7 @@ const userLogin = async () => {
     }
 
     const JWT_SECRET = process.env.JWT_SECRET;
-    const token = jwt.sign(user._id, JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, JWT_SECRET);
     res.cookie("token", token, {
       httpOnly: true,
     });
