@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/user.model");
 
 const userLogin = async (req, res) => {
   try {
@@ -40,4 +40,9 @@ const userLogin = async (req, res) => {
   }
 };
 
-module.exports = { userLogin };
+const middlewareChecker = async (req, res) => {
+  console.log(req.token);
+  console.log("checker is executed");
+  res.send("this is checker file");
+};
+module.exports = { userLogin, middlewareChecker };
