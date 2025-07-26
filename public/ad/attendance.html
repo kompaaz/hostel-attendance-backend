@@ -5,354 +5,244 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hostel Attendance</title>
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --primary: #3b82f6;
+      --present: #d1fae5;
+      --absent: #fee2e2;
+      --text-dark: #1f2937;
     }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f4f6;
       padding: 1rem;
-      background-color: #f0f2f5;
+      color: var(--text-dark);
     }
 
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background-color: #ffffff;
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-    }
-
-    h2 {
+    header {
       text-align: center;
-      margin-bottom: 1.5rem;
-      color: #333;
+      margin-bottom: 1rem;
     }
 
-    .student {
+    #datetime {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #4b5563;
+    }
+
+    .room-card {
+      background: white;
+      margin-bottom: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 1rem;
+    }
+
+    .room-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .student-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .student-card {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 12px;
-      background-color: #f9f9f9;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
     }
 
-    .student-info {
-      flex: 1;
+    .student-name {
+      font-weight: 500;
     }
 
-    .name {
-      font-weight: 600;
-      font-size: 1rem;
-      color: #222;
-    }
-
-    .room {
-      font-size: 0.85rem;
-      color: #666;
-      margin-top: 0.2rem;
-    }
-
-    .status-btns {
+    .status-buttons {
       display: flex;
-      gap: 10px;
-      margin-left: 10px;
+      gap: 0.5rem;
     }
 
-    .btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: none;
-      font-weight: bold;
-      font-size: 1rem;
+    .status-btn {
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.3s ease, transform 0.2s ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-      outline: none;
+      font-weight: 500;
+      border: 1px solid transparent;
+      transition: 0.2s;
     }
 
-    .btn:focus {
-      outline: none;
+    .status-btn.present {
+      background-color: var(--present);
+      color: #065f46;
     }
 
-    .btn.p {
-      background-color: #e0f7e9;
-      color: #2e7d32;
+    .status-btn.absent {
+      background-color: var(--absent);
+      color: #991b1b;
     }
 
-    .btn.a {
-      background-color: #fdecea;
-      color: #c62828;
+    .status-btn.active {
+      border: 2px solid var(--primary);
     }
 
-    .btn.active {
-  transform: scale(1.1);
-}
-
-    .btn.active.p {
-      background-color: #2e7d32;
-      color: white;
-    }
-
-    .btn.active.a {
-      background-color: #c62828;
-      color: white;
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      background-color: #4caf50;
-      color: white;
-      font-size: 1.05rem;
-      font-weight: bold;
+    #saveBtn {
+      display: block;
+      margin: 2rem auto 1rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
       border: none;
+      background: var(--primary);
+      color: white;
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s;
     }
 
-    .submit-btn:hover {
-      background-color: #43a047;
+    #saveBtn:hover {
+      background: #2563eb;
     }
-.sort-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #374151;
-}
 
-.sort-label {
-  margin-right: 0.25rem;
-}
+    #summary {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+    }
 
-.sort-select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: #f3f4f6;
-  color: #111827;
-  outline: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.sort-select:hover,
-.sort-select:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  background: #e0f2fe;
-}
-
-
-    @media (min-width: 600px) {
-      .btn {
-        width: 46px;
-        height: 46px;
-        font-size: 1.1rem;
+    @media (min-width: 768px) {
+      .student-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .student-card {
+        flex: 1 1 calc(50% - 1rem);
       }
     }
-    .datetime-banner {
-  text-align: center;
-  font-size: 1rem;
-  color: #444;
-  margin-bottom: 1.2rem;
-  padding: 0.6rem 1rem;
-  background: linear-gradient(to right, #e0f7fa, #e8f5e9);
-  border: 1px solid #c8e6c9;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
   </style>
 </head>
 <body>
-   <div class="container">
-   <div id="datetime" class="datetime-banner"></div>
+  <header>
+    <h2>📝 Hostel Attendance</h2>
+    <div id="datetime"></div>
+  </header>
 
-    <h2>Hostel Attendance</h2>
-<div class="sort-container" id="sort-container">
-  <label for="sortSelect" class="sort-label">Sort By:</label>
-  <select id="sortSelect" onchange="sortStudents()" class="sort-select">
-    <option value="default">Select</option>
-    <option value="name">Name (A–Z)</option>
-    <option value="room">Room Number</option>
-    <option value="present">Present First</option>
-    <option value="absent">Absent First</option>
-  </select>
-</div>
+  <div id="attendance-container"></div>
 
+  <button id="saveBtn">✅ Save Attendance</button>
 
-    <div id="studentList">
-      <!-- Student rows will be injected here -->
-    </div>
-    <div id="absentCount" style="text-align:center; margin-top:1rem; font-weight:600; color:#c62828;">
-  Absent: 0
-</div>
-
-    <button class="submit-btn" onclick="submitAttendance()">Submit Attendance</button>
-  </div>
+  <div id="summary">Total Present: 0 | Total Absent: 0</div>
 
   <script>
-    function sortStudents() {
-  const value = document.getElementById("sortSelect").value;
-  const combined = students.map((student, i) => ({
-    ...student,
-    index: i,
-    status: attendanceData[i],
-  }));
-
-  switch (value) {
-    case "name":
-      combined.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case "room":
-      combined.sort((a, b) => a.room.localeCompare(b.room));
-      break;
-    case "present":
-      combined.sort((a, b) => b.status.localeCompare(a.status)); // P > A
-      break;
-    case "absent":
-      combined.sort((a, b) => a.status.localeCompare(b.status)); // A > P
-      break;
-    default:
-      break;
-  }
-
-  renderStudents(combined);
-}
-
-function renderStudents(customList = null) {
-  studentList.innerHTML = "";
-  const data = customList || students.map((s, i) => ({ ...s, index: i, status: attendanceData[i] }));
-
-  data.forEach((studentObj, i) => {
-    const div = document.createElement("div");
-    div.className = "student";
-    div.innerHTML = `
-      <div class="student-info">
-        <div class="name">${studentObj.name}</div>
-        <div class="room">Room: ${studentObj.room}</div>
-      </div>
-      <div class="status-btns">
-        <button class="btn p ${studentObj.status === 'P' ? 'active' : ''}" onclick="markStatus(${studentObj.index}, 'P', this)">P</button>
-        <button class="btn a ${studentObj.status === 'A' ? 'active' : ''}" onclick="markStatus(${studentObj.index}, 'A', this)">A</button>
-      </div>
-    `;
-    studentList.appendChild(div);
-  });
-}
-
-    const students = [
-      { name: "Aakash Kumar", room: "101" },
-      { name: "Ravi Teja", room: "102" },
-      { name: "Sathya Narayanan", room: "103" },
-      { name: "Arjun Ramesh", room: "104" },
-      { name: "Manoj Prasad", room: "105" },
+    const studentsData = [
+      { room: "101", students: ["Bala", "Arun"] },
+      { room: "102", students: ["Ravi", "Surya"] },
+      { room: "103", students: ["Vimal", "Kumar"] },
     ];
 
-    const studentList = document.getElementById("studentList");
-    const attendanceData = new Array(students.length).fill("P");
+    const statusMap = {}; // { name: "present" }
 
-    students.forEach((student, index) => {
-      const div = document.createElement("div");
-      div.className = "student";
-      div.innerHTML = `
-        <div class="student-info">
-          <div class="name">${student.name}</div>
-          <div class="room">Room: ${student.room}</div>
-        </div>
-        <div class="status-btns">
-          <button class="btn p" onclick="markStatus(${index}, 'P')">P</button>
-          <button class="btn a" onclick="markStatus(${index}, 'A')">A</button>
-        </div>
-      `;
-      studentList.appendChild(div);
-    });
+    const container = document.getElementById("attendance-container");
 
+    function renderStudents() {
+      container.innerHTML = "";
+      let presentCount = 0;
+      let absentCount = 0;
 
-function updateAbsentCount() {
-  const count = attendanceData.filter(s => s === "A").length;
-  document.getElementById("absentCount").textContent = `Absent: ${count}`;
-}
+      studentsData.forEach(({ room, students }) => {
+        const roomCard = document.createElement("div");
+        roomCard.className = "room-card";
 
+        const roomTitle = document.createElement("div");
+        roomTitle.className = "room-title";
+        roomTitle.textContent = `Room ${room}`;
 
-    function markStatus(index, status) {
-  attendanceData[index] = status;
-  const studentCard = studentList.children[index];
-  const [btnP, btnA] = studentCard.querySelectorAll(".btn");
+        const studentList = document.createElement("div");
+        studentList.className = "student-list";
 
-  btnP.classList.remove("active");
-  btnA.classList.remove("active");
+        students.forEach((name) => {
+          if (!statusMap[name]) statusMap[name] = "present";
 
-  if (status === "P") {
-    btnP.classList.add("active");
-  } else {
-    btnA.classList.add("active");
-  }
+          const card = document.createElement("div");
+          card.className = "student-card";
 
-  renderStudents();
-  updateAbsentCount(); // 🔴 update absent count live
-}
+          const studentName = document.createElement("div");
+          studentName.className = "student-name";
+          studentName.textContent = name;
 
+          const statusBtns = document.createElement("div");
+          statusBtns.className = "status-buttons";
 
-   function submitAttendance() {
-  const confirmSubmit = confirm("Are you sure you want to submit the attendance?");
-  if (!confirmSubmit) return;
+          const pBtn = document.createElement("button");
+          pBtn.textContent = "P";
+          pBtn.className = "status-btn present";
+          if (statusMap[name] === "present") pBtn.classList.add("active");
 
-  const result = students.map((student, i) => ({
-    name: student.name,
-    room: student.room,
-    status: attendanceData[i],
-  }));
+          const aBtn = document.createElement("button");
+          aBtn.textContent = "A";
+          aBtn.className = "status-btn absent";
+          if (statusMap[name] === "absent") aBtn.classList.add("active");
 
-  console.log("Attendance Submitted:", result);
-  alert("✅ Attendance Submitted Successfully!");
-}
+          pBtn.onclick = () => {
+            statusMap[name] = "present";
+            renderStudents();
+          };
 
+          aBtn.onclick = () => {
+            statusMap[name] = "absent";
+            renderStudents();
+          };
 
-    // Initialize all as Present by default
-    students.forEach((_, i) => markStatus(i, "P"));
+          statusBtns.append(pBtn, aBtn);
+          card.append(studentName, statusBtns);
+          studentList.appendChild(card);
 
-    function updateDateTime() {
-  const now = new Date();
-  const options = {
-    weekday: 'short',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  };
-  document.getElementById('datetime').textContent = now.toLocaleString('en-IN', options);
-}
+          statusMap[name] === "present" ? presentCount++ : absentCount++;
+        });
 
-setInterval(updateDateTime, 1000);
-updateDateTime(); // initial call
-window.addEventListener("beforeunload", function (e) {
-  e.preventDefault();
-  e.returnValue = "Are you sure you want to leave? Unsaved attendance will be lost.";
-});
+        roomCard.append(roomTitle, studentList);
+        container.appendChild(roomCard);
+      });
 
+      document.getElementById("summary").textContent =
+        `Total Present: ${presentCount} | Total Absent: ${absentCount}`;
+    }
+
+    // Save Confirmation
+    document.getElementById("saveBtn").onclick = () => {
+      if (confirm("Are you sure you want to submit today's attendance?")) {
+        alert("✅ Attendance Submitted!");
+        // Add API call or save logic here
+      }
+    };
+
+    // Live DateTime
+    function updateTime() {
+      const now = new Date();
+      const timeStr = now.toLocaleString("en-IN", {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+      document.getElementById("datetime").textContent = timeStr;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    renderStudents();
   </script>
 </body>
 </html>
