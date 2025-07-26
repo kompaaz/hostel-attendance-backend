@@ -1,5 +1,5 @@
-const router = express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const userLogin = async () => {
@@ -20,14 +20,20 @@ const userLogin = async () => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    const JWT_SECRET = process.env.JWT_SECRET;
+    const token = jwt.sign(user._id, JWT_SECRET);
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
+
     // ✅ Login success
     res.status(200).json({
       message: "Login successful",
-      user: {
-        id: user._id,
-        role: user.role,
-        hall: user.hall || null,
-      },
+      //   user: {
+      //     id: user._id,
+      //     role: user.role,
+      //     hall: user.hall || null,
+      //   },
     });
   } catch (err) {
     console.error("Login Error:", err);
