@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const verifyToken = require("../middleware/auth");
-const Student = require("../models/Student");
+const Student = require("../models/student.model");
 
 // GET all students for a specific AD
 router.get("/", verifyToken, async (req, res) => {
