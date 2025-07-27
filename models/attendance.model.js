@@ -10,6 +10,7 @@ const attendanceSchema = new mongoose.Schema({
   type: String, // "general" or "mass"
   records: [
     {
+      name: String,
       accountNumber: String,
       status: String, // "present" or "absent"
     },
