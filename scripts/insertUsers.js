@@ -51,24 +51,32 @@ async function insertInitialUsers() {
       },
     },
     {
-      username: "Brother",
-      password: await bcrypt.hash("1234", 10),
-      role: "ad",
-      roomsIncharge: {
-        hall: [],
-        from: 49, // start room number
-        to: 100, // end room number
-      },
+      roll: "22BCS002",
+      name: "Rahul Kumar",
+      room: "B202",
+      community: "MBC",
+      assignedAd: "AD002",
     },
     {
-      username: "Rex",
-      password: await bcrypt.hash("1234", 10),
-      role: "ad",
-      roomsIncharge: {
-        hall: ["Britto Hall", "Beschi Hall", "Loyola Hall", "Xavier Hall"],
-        from: 2, // start room number
-        to: 20, // end room number
-      },
+      roll: "22BCS003",
+      name: "Priya Sharma",
+      room: "C303",
+      community: "OC",
+      assignedAd: "AD001",
+    },
+    {
+      roll: "22BCS004",
+      name: "Arjun Reddy",
+      room: "D404",
+      community: "SC",
+      assignedAd: "AD003",
+    },
+    {
+      roll: "22BCS005",
+      name: "Sneha Nair",
+      room: "E505",
+      community: "ST",
+      assignedAd: "AD002",
     },
   ];
 
