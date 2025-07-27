@@ -35,7 +35,7 @@ const userLogin = async (req, res) => {
     //   // },
     // });
 
-    res.redirect("/ad_attendance");
+    res.redirect("/api/attendance");
   } catch (err) {
     console.error("Error in userLogin controller \n", err);
     res.status(500).json({ message: "Server error" });
