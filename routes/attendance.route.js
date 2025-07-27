@@ -59,9 +59,12 @@ router.get("/", verifyToken, async (req, res) => {
           $or: matchConditions,
         },
       },
+      {
+        $limit: 2, // Add this stage to return only 2 documents
+      },
     ]);
 
-    console.log(students);
+    // console.log(stude`nts);
 
     // Group by roomNo
     const groupedUsers = {};
@@ -81,7 +84,7 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
-router.post("/mark", markAttendance);
+router.post("/mark", verifyToken, markAttendance);
 
 // GET: Fetch all students based on adId
 router.get("/students", getStudents);
