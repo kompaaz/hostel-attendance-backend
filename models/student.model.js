@@ -7,8 +7,8 @@ const studentSchema = new mongoose.Schema({
   roomNo: String,
   religion: String,
   assignedAd: String,
-  parentNo: Long,
-  studentNo: Long,
+  parentNo: String,
+  studentNo: String,
 });
 
 module.exports = mongoose.model("student", studentSchema);
