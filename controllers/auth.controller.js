@@ -35,7 +35,7 @@ const userLogin = async (req, res) => {
       // },
     });
   } catch (err) {
-    console.error("Login Error:", err);
+    console.error("Error in userLogin controller \n", err);
     res.status(500).json({ message: "Server error" });
   }
 };
