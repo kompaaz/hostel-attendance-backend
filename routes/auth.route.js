@@ -10,10 +10,7 @@ const { userLogin } = require("../controllers/auth.controller");
 
 // login user
 router.get("/login", async (req, res) => {
-  const student = await Students.find();
-  console.log(student);
-
-  res.render("login", { users: student });
+  res.render("login");
 });
 router.post("/login", isUserLoggedIn, userLogin);
 
