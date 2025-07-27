@@ -28,11 +28,11 @@ const userLogin = async (req, res) => {
     // ✅ Login success
     // res.status(200).json({
     //   message: "Login successful",
-    //   // user: {
-    //   //   id: user._id,
-    //   //   role: user.role,
-    //   //   hall: user.hall || null,
-    //   // },
+    //   user: {
+    //     id: user._id,
+    //     role: user.role,
+    //     hall: user.hall || null,
+    //   },
     // });
 
     res.redirect("/api/attendance");
