@@ -4,8 +4,6 @@ require("dotenv").config();
 const isUserLoggedIn = async (req, res, next) => {
   try {
     const token = req.cookies.token;
-    console.log(token);
-    console.log("this is cookeie");
     if (token) {
       return res.redirect("http://localhost:5000/api/auth/login");
     }
