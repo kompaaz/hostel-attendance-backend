@@ -6,7 +6,6 @@ const studentSchema = new mongoose.Schema({
   name: String,
   roomNo: String,
   religion: String,
-  assignedAd: String,
   parentNo: String,
   studentNo: String,
 });
