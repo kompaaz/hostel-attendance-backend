@@ -72,13 +72,18 @@
   </head>
   <body>
     <div class="container">
-      <form class="login-form" onsubmit="handleLogin(event)">
+      <form
+        class="login-form"
+        method="POST"
+        action="http://localhost:5000/api/auth/login"
+      >
         <h2>Login</h2>
 
         <label for="username">Username</label>
         <input
           type="text"
           id="username"
+          name="username"
           placeholder="Enter your username"
           required
         />
@@ -87,23 +92,13 @@
         <input
           type="password"
           id="password"
+          name="password"
           placeholder="Enter your password"
           required
         />
 
         <button type="submit">Login</button>
       </form>
-      <!-- <div>
-        <h1>Rendering Users</h1>
-        <ul>
-          <% users.forEach(user => { %>
-          <li><%= user.name %></li>
-          <li><%= user.room %></li>
-          <li><%= user.community %></li>
-          <hr>
-          <% }) %>
-        </ul>
-      </div> -->
     </div>
 
     <script>
