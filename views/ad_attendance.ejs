@@ -4,7 +4,173 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hostel Attendance</title>
-  <link rel="stylesheet" href="/styles/ad_attendance.css">
+  <style>:root {
+  --primary: #3b82f6;
+  --present: #d1fae5;
+  --absent: #fee2e2;
+  --text-dark: #1f2937;
+  --bg-light: #ffffff;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --hover-scale: scale(1.02);
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f3f4f6;
+  padding: 1rem;
+  color: var(--text-dark);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#datetime {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #4b5563;
+}
+
+.room-card {
+  background: var(--bg-light);
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  padding: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.room-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.student-card {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.student-name {
+  font-weight: 500;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.status-btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: 0.2s ease-in-out;
+}
+
+.status-btn.present {
+  background-color: var(--present);
+  color: #065f46;
+}
+
+.status-btn.absent {
+  background-color: var(--absent);
+  color: #991b1b;
+}
+
+.status-btn.active {
+  border: 2px solid var(--primary);
+}
+
+#saveBtn {
+  display: block;
+  margin: 2rem auto 1rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  background: var(--primary);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#saveBtn:hover {
+  background: #2563eb;
+}
+
+#summary {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+/* ----------------- Desktop Enhancements ------------------ */
+@media (min-width: 768px) {
+  body {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  header {
+    margin-bottom: 2rem;
+  }
+
+  .student-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .student-card {
+    flex: 1 1 calc(50% - 1rem);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease;
+  }
+
+  .student-card:hover {
+    transform: var(--hover-scale);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .room-card {
+    padding: 1.5rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s;
+  }
+
+  .room-card:hover {
+    transform: translateY(-4px);
+  }
+
+  #saveBtn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+
+  #summary {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+  }
+}
+</style>
 </head>
 <body>
   <header>
