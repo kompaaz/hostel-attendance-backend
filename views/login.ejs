@@ -102,25 +102,6 @@
     </div>
 
     <script>
-      function handleLogin(event) {
-        event.preventDefault();
-
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value;
-
-        const users = {
-          student1: { password: "1234", redirect: "student_dashboard.html" },
-          ad1: { password: "1234", redirect: "ad_attendance" },
-          director1: { password: "1234", redirect: "director_dashboard.html" },
-          admin1: { password: "1234", redirect: "admin_dashboard.html" },
-        };
-
-        if (users[username] && users[username].password === password) {
-          window.location.href = users[username].redirect;
-        } else {
-          alert("Invalid username or password");
-        }
-      }
     </script>
   </body>
 </html>
