@@ -3,7 +3,8 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const Student = require("../models/student.model");
 
-const MONGO_URI = "mongodb://127.0.0.1:27017/hostel_attendance";
+const MONGO_URI =
+  "mongodb+srv://rakeshjoe53:Joe%401234@sh.wor9tka.mongodb.net/?retryWrites=true&w=majority&appName=sh";
 
 async function insertInitialUsers() {
   await mongoose.connect(MONGO_URI);
@@ -48,6 +49,16 @@ async function insertInitialUsers() {
         hall: [],
         from: 112, // start room number
         to: 128, // end room number
+      },
+    },
+    {
+      username: "Philips",
+      password: await bcrypt.hash("1234", 10),
+      role: "ad",
+      roomsIncharge: {
+        hall: [],
+        from: 49, // start room number
+        to: 100, // end room number
       },
     },
   ];
