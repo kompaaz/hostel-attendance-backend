@@ -1,8 +1,17 @@
 const Attendance = require("../models/attendance.model");
 
 const markAttendance = async (req, res) => {
-  const { ad, type, records } = req.body;
-  const date = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+  const ad = req.token.id;
+  console.log("this is ad id");
+
+  console.log(ad);
+  const { records } = req.body;
+  console.log("this is records");
+
+  console.log(records);
+
+  const type = "general";
+  // const date = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
 
   if (!ad || !records || !type)
     return res.status(400).json({ error: "Missing fields" });
