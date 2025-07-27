@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema({
-  roll: String,
+  dNo: String,
+  accNo: Number,
   name: String,
-  room: String,
-  community: String,
+  roomNo: String,
+  religion: String,
   assignedAd: String,
+  parentNo: Long,
+  studentNo: Long,
 });
 
 module.exports = mongoose.model("student", studentSchema);
