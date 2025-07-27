@@ -14,6 +14,12 @@ router.get("/login", async (req, res) => {
 });
 router.post("/login", isUserLoggedIn, userLogin);
 
+router.get("/logout", (req, res) => {
+  res.cookie("token", "", {
+    maxAge: 0,
+  });
+  res.redirect("/api/auth/login");
+});
 
 router.get("/student_list", async (req, res) => {
   const students = await Students.find();
