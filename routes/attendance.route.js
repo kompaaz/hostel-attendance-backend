@@ -15,9 +15,32 @@ router.get("/", verifyToken, async (req, res) => {
   try {
     const adId = req.token.id;
     const user = await User.findById(adId);
-    console.log(user.roomsIncharge.hall);
+    console.log(user);
+
+    // console.log(user.roomsIncharge.hall);
 
     // const students = await Students.find();
+
+    const halls = user.roomsIncharge?.hall || [];
+    const from = parseInt(user.roomsIncharge?.from);
+    const to = parseInt(user.roomsIncharge?.to);
+
+    const matchConditions = [];
+
+    if (Array.isArray(halls) && halls.length > 0) {
+      matchConditions.push({
+        $and: [
+          { roomNo: { $in: halls } },
+          { roomNo: { $not: { $regex: /\d/ } } }, // strict hall match (like 'VB')
+        ],
+      });
+    }
+
+    if (!isNaN(from) && !isNaN(to)) {
+      matchConditions.push({
+        numericRoom: { $gte: from, $lte: to },
+      });
+    }
 
     const students = await Students.aggregate([
       {
@@ -33,20 +56,12 @@ router.get("/", verifyToken, async (req, res) => {
       },
       {
         $match: {
-          $or: [
-            { roomNo: { $in: user.roomsIncharge.hall } },
-            {
-              numericRoom: {
-                $gte: user.roomsIncharge.from,
-                $lte: user.roomsIncharge.to,
-              },
-            },
-          ],
+          $or: matchConditions,
         },
       },
     ]);
 
-    // console.log(students);
+    console.log(students);
 
     // Group by roomNo
     const groupedUsers = {};
