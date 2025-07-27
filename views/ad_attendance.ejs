@@ -65,7 +65,7 @@
 
         // Loop through each student card to count status
         document.querySelectorAll(".student-card").forEach((card) => {
-          // const name = card.dataset.accNo;
+          const name = card.dataset.accNo;
           const accNo = card.dataset.acc;
           const pBtn = card.querySelector(".present");
           const aBtn = card.querySelector(".absent");
@@ -88,7 +88,7 @@
 
       // Add event listeners to each button for every student
       document.querySelectorAll(".student-card").forEach((card) => {
-        // const name = card.dataset.name;
+        const name = card.dataset.name;
         const accNo = card.dataset.acc;
         const pBtn = card.querySelector(".present");
         const aBtn = card.querySelector(".absent");
@@ -112,40 +112,46 @@
 
       // On clicking Save, confirm and log the status map
       document.getElementById("saveBtn").onclick = () => {
-        if (confirm("Are you sure you want to submit today's attendance?")) {
-          // alert("✅ Attendance Submitted!");
-          // In production, you'd POST this data to your server here
-          console.log(statusMap); // Logs collected data
-          // http://localhost:5000/api/attendance/mark
+        const formattedRecords = [];
 
-          const formattedRecords = Object.entries(statusMap).map(
-            ([accountNumber, status]) => ({
-              accountNumber,
-              status,
-            })
-          );
+        // Loop through all student cards
+        document.querySelectorAll(".student-card").forEach((card) => {
+          const accountNumber = card.dataset.acc;
+          const name = card.dataset.name;
+          const status = card
+            .querySelector(".present")
+            .classList.contains("active")
+            ? "present"
+            : "absent";
 
-          fetch("http://localhost:5000/api/attendance/mark", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ records: formattedRecords }),
+          formattedRecords.push({
+            accountNumber,
+            name,
+            status,
+          });
+        });
+
+        console.log("Sending data:", formattedRecords);
+
+        fetch("http://localhost:5000/api/attendance/mark", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ records: formattedRecords }),
+        })
+          .then((response) => {
+            if (!response.ok) throw new Error("Failed to mark attendance");
+            return response.json();
           })
-            .then((response) => {
-              if (!response.ok) throw new Error("Failed to mark attendance");
-              return response.json();
-            })
-            .then((data) => {
-              console.log("✅ Server response:", data);
-              // Optionally alert success again
-              // alert("Attendance successfully recorded!");
-            })
-            .catch((error) => {
-              console.error("❌ Error submitting attendance:", error);
-              // alert("Something went wrong while submitting attendance.");
-            });
-        }
+          .then((data) => {
+            console.log("✅ Server response:", data);
+            // alert("Attendance successfully recorded!");
+          })
+          .catch((error) => {
+            console.error("❌ Error submitting attendance:", error);
+            alert("Error submitting attendance!");
+          });
       };
 
       // Show real-time clock
