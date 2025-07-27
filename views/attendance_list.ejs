@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📋 Attendance List (Grouped by AD)</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f4f4f9;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #3b82f6;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .ad-block {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 2px solid #3b82f6;
+      border-radius: 10px;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>📋 Attendance List (Grouped by AD)</h1>
+
+  <% for (const adId in groupedByAD) {
+      const ad = groupedByAD[adId];
+  %>
+    <div class="ad-block">
+      <h2>🧑‍🏫 Assistant Director: <%= ad.name %> (<%= adId %>)</h2>
+
+      <% ad.records.forEach((session) => { %>
+        <p><strong>Date:</strong> <%= new Date(session.date).toLocaleDateString("en-IN") %></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Account Number</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% session.records.forEach((record) => { %>
+              <tr>
+                <td><%= record.name %></td>
+                <td><%= record.accountNumber %></td>
+                <td><%= record.status %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% }); %>
+    </div>
+  <% } %>
+</body>
+</html>
