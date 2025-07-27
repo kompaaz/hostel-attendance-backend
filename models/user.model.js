@@ -3,9 +3,13 @@ const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // hashed
+  password: { type: String, required: true },
   role: { type: String, enum: ["director", "ad", "admin"], required: true },
-  hall: { type: String }, // only needed for AD
+  roomsIncharge: {
+    hall: [],
+    from: Number, // start room number
+    to: Number, // end room number
+  },
   createdAt: { type: Date, default: Date.now },
 });
 
