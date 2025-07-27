@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // hashed
-  role: { type: String, enum: ["director", "ad"], required: true },
+  role: { type: String, enum: ["director", "ad", "admin"], required: true },
   hall: { type: String }, // only needed for AD
   createdAt: { type: Date, default: Date.now },
 });
