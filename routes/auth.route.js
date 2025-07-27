@@ -11,8 +11,7 @@ const { route } = require("./auth.route");
 
 // login user
 router.get("/login", async (req, res) => {
-  const students = await Students.find();
-  res.render("login", { users: students });
+  res.render("login");
 });
 router.post("/login", isUserLoggedIn, userLogin);
 
