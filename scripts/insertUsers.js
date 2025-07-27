@@ -20,60 +20,55 @@ async function insertInitialUsers() {
         to: 48, // end room number
       },
     },
-    // {
-    //   username: "director_father",
-    //   password: await bcrypt.hash("father123", 10),
-    //   role: "director",
-    // },
-    // {
-    //   username: "ad_john",
-    //   password: await bcrypt.hash("john123", 10),
-    //   role: "ad",
-    //   hall: "St Paul Hall",
-    // },
-    // {
-    //   username: "ad_mary",
-    //   password: await bcrypt.hash("mary123", 10),
-    //   role: "ad",
-    //   hall: "St Thomas Hall",
-    // },
-  ];
-
-  const students = [
     {
-      roll: "22BCS001",
-      name: "Noel Sebu",
-      room: "A101",
-      community: "BC",
-      assignedAd: "AD001",
+      username: "Vimal Jerald",
+      password: await bcrypt.hash("1234", 10),
+      role: "ad",
+      roomsIncharge: {
+        hall: ["VB", "JIM"],
+        from: null, // start room number
+        to: null, // end room number
+      },
     },
     {
-      roll: "22BCS002",
-      name: "Rahul Kumar",
-      room: "B202",
-      community: "MBC",
-      assignedAd: "AD002",
+      username: "Jovin",
+      password: await bcrypt.hash("1234", 10),
+      role: "ad",
+      roomsIncharge: {
+        hall: [],
+        from: 129, // start room number
+        to: 146, // end room number
+      },
     },
     {
-      roll: "22BCS003",
-      name: "Priya Sharma",
-      room: "C303",
-      community: "OC",
-      assignedAd: "AD001",
+      username: "Saravanan",
+      password: await bcrypt.hash("1234", 10),
+      role: "ad",
+      roomsIncharge: {
+        hall: [],
+        from: 112, // start room number
+        to: 128, // end room number
+      },
     },
     {
-      roll: "22BCS004",
-      name: "Arjun Reddy",
-      room: "D404",
-      community: "SC",
-      assignedAd: "AD003",
+      username: "Brother",
+      password: await bcrypt.hash("1234", 10),
+      role: "ad",
+      roomsIncharge: {
+        hall: [],
+        from: 49, // start room number
+        to: 100, // end room number
+      },
     },
     {
-      roll: "22BCS005",
-      name: "Sneha Nair",
-      room: "E505",
-      community: "ST",
-      assignedAd: "AD002",
+      username: "Rex",
+      password: await bcrypt.hash("1234", 10),
+      role: "ad",
+      roomsIncharge: {
+        hall: ["Britto Hall", "Beschi Hall", "Loyola Hall", "Xavier Hall"],
+        from: 2, // start room number
+        to: 20, // end room number
+      },
     },
   ];
 
