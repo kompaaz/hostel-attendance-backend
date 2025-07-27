@@ -50,34 +50,6 @@ async function insertInitialUsers() {
         to: 128, // end room number
       },
     },
-    {
-      roll: "22BCS002",
-      name: "Rahul Kumar",
-      room: "B202",
-      community: "MBC",
-      assignedAd: "AD002",
-    },
-    {
-      roll: "22BCS003",
-      name: "Priya Sharma",
-      room: "C303",
-      community: "OC",
-      assignedAd: "AD001",
-    },
-    {
-      roll: "22BCS004",
-      name: "Arjun Reddy",
-      room: "D404",
-      community: "SC",
-      assignedAd: "AD003",
-    },
-    {
-      roll: "22BCS005",
-      name: "Sneha Nair",
-      room: "E505",
-      community: "ST",
-      assignedAd: "AD002",
-    },
   ];
 
   // await User.deleteMany({}); // Optional: clear old users
