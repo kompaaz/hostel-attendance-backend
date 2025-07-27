@@ -35,7 +35,7 @@ router.get("/ad_attendance", async (req, res) => {
       }
       groupedUsers[room].push(student);
     });
-
+    console.log(groupedUsers);
     res.render("ad_attendance", { groupedUsers });
   } catch (error) {
     console.error("Error fetching students:", error);
