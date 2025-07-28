@@ -5,7 +5,7 @@ const isUserLoggedIn = async (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (token) {
-      return res.redirect("/login");
+      return res.redirect("/api/auth/login");
     }
     next();
   } catch (error) {
