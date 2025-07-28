@@ -6,7 +6,10 @@ const attendanceSchema = new mongoose.Schema({
     required: true,
     default: Date.now, // Optional default
   }, // "YYYY-MM-DD"
-  ad: String,
+  ad: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // this should match the name of the model you have defined for ADs
+  },
   type: String, // "general" or "mass"
   records: [
     {
