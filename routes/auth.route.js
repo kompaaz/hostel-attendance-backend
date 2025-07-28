@@ -20,7 +20,7 @@ router.get("/logout", (req, res) => {
   res.cookie("token", "", {
     maxAge: 0,
   });
-  res.redirect("/api/auth/login");
+  res.redirect("https://sh.devnoel.org/logout");
 });
 
 router.get("/student_list", async (req, res) => {

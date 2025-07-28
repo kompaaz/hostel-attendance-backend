@@ -14,10 +14,15 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000", // Your frontend origin
+//     credentials: true,               // Allow cookies
+//   })
+// );
 app.use(
   cors({
-    origin: "http://localhost:3000", // Your frontend origin
-    origin: "https://hostel-attendance-frontend.vercel.app", // Your frontend origin
+    origin: "https://sh.devnoel.org", // Your frontend origin
     credentials: true,               // Allow cookies
   })
 );
@@ -39,6 +44,10 @@ mongoose
   .catch((err) => console.error(err));
 
 module.exports = app;
+// const PORT = 5000;
+// app.listen(PORT, () => {
+//   console.log("Listening on PORT : " + PORT);
+// });
 // const PORT = 5000;
 // app.listen(PORT, () => {
 //   console.log("Listening on PORT : " + PORT);
