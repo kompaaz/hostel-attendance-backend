@@ -14,7 +14,12 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Your frontend origin
+    credentials: true,               // Allow cookies
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -33,7 +38,7 @@ mongoose
   .catch((err) => console.error(err));
 
 module.exports = app;
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => {
-//   console.log("Listening on PORT : " + PORT);
-// });
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log("Listening on PORT : " + PORT);
+});
