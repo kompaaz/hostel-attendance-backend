@@ -17,8 +17,11 @@ router.get("/login", async (req, res) => {
 router.post("/login", isUserLoggedIn, userLogin);
 
 router.get("/logout", (req, res) => {
-  res.cookie("token", "", {
-    maxAge: 0,
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true, // ✅ Required on Vercel (HTTPS)
+    sameSite: "None", // ✅ Required for cross-origin cookie
+    // maxAge: 86400000, // Optional: 1 day
   });
   res.redirect("https://sh.devnoel.org/logout");
 });

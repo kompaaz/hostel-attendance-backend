@@ -23,7 +23,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(
   cors({
     origin: "https://sh.devnoel.org", // Your frontend origin
-    credentials: true,               // Allow cookies
+    credentials: true, // Allow cookies
   })
 );
 app.use(express.urlencoded({ extended: true }));
