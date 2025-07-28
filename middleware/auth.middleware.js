@@ -5,7 +5,10 @@ const isUserLoggedIn = async (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (token) {
-      return res.redirect("https://sh.devnoel.org/take-attendance");
+      // return res.redirect("https://sh.devnoel.org/take-attendance");
+      res.status(200).json({
+        message: "User is already logged in",
+      });
     }
     next();
   } catch (error) {
