@@ -61,6 +61,16 @@ async function insertInitialUsers() {
         to: 100, // end room number
       },
     },
+     {
+      username: "Rex",
+      password: await bcrypt.hash("1234", 10),
+      role: "ad",
+      roomsIncharge: {
+        hall: ["Beschi Hall","Britto Hall","Xavier Hall", "Loyola Hall"],
+        from: 2, // start room number
+        to: 20, // end room number
+      },
+    },
   ];
 
   // await User.deleteMany({}); // Optional: clear old users
