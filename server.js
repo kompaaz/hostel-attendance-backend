@@ -17,7 +17,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(
   cors({
     origin: "http://localhost:3000", // Your frontend origin
-    origin: "https://hostel-attendance-backend.vercel.app", // Your frontend origin
+    origin: "https://hostel-attendance-frontend.vercel.app", // Your frontend origin
     credentials: true,               // Allow cookies
   })
 );
