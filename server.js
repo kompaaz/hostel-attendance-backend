@@ -14,7 +14,18 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(cors());
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000", // Your frontend origin
+//     credentials: true,               // Allow cookies
+//   })
+// );
+app.use(
+  cors({
+    origin: "https://sh.devnoel.org", // Your frontend origin
+    credentials: true,               // Allow cookies
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -32,7 +43,8 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log("Listening on PORT : " + PORT);
-});
+module.exports = app;
+// const PORT = 5000;
+// app.listen(PORT, () => {
+//   console.log("Listening on PORT : " + PORT);
+// });

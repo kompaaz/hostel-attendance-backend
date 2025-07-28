@@ -35,7 +35,9 @@ const userLogin = async (req, res) => {
     //   },
     // });
 
-    res.redirect("/api/attendance");
+    
+    // res.redirect("/api/attendance");
+    res.redirect("https://sh.devnoel.org/attendance-records");
   } catch (err) {
     console.error("Error in userLogin controller \n", err);
     res.status(500).json({ message: "Server error" });

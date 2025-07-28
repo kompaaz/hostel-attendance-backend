@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build": "echo 'No build step required'"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.4",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "vercel": "^44.6.3"
   }
 }

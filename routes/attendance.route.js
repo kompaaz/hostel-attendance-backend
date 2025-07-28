@@ -13,9 +13,11 @@ const { getStudents } = require("../controllers/student.controller");
 // POST /api/attendance/mark
 router.get("/", verifyToken, async (req, res) => {
   try {
+    console.log("requerst is comming");
+    
     const adId = req.token.id;
     const user = await User.findById(adId);
-    console.log(user);
+    // console.log(user);
 
     // console.log(user.roomsIncharge.hall);
 
@@ -31,7 +33,7 @@ router.get("/", verifyToken, async (req, res) => {
       matchConditions.push({
         $and: [
           { roomNo: { $in: halls } },
-          { roomNo: { $not: { $regex: /\d/ } } }, // strict hall match (like 'VB')
+          { roomNo: { $not: { $regex: /\d/ } } },
         ],
       });
     }
@@ -59,30 +61,23 @@ router.get("/", verifyToken, async (req, res) => {
           $or: matchConditions,
         },
       },
-      {
-        $limit: 2, // Add this stage to return only 2 documents
-      },
     ]);
 
-    // console.log(stude`nts);
-
-    // Group by roomNo
     const groupedUsers = {};
-
     students.forEach((student) => {
       const room = student.roomNo || "Unknown";
-      if (!groupedUsers[room]) {
-        groupedUsers[room] = [];
-      }
+      if (!groupedUsers[room]) groupedUsers[room] = [];
       groupedUsers[room].push(student);
     });
-    // console.log(groupedUsers);
-    res.render("ad_attendance", { groupedUsers });
+
+    // ✅ Send JSON instead of rendering a view
+    res.json({ students: groupedUsers });
   } catch (error) {
     console.error("Error fetching students:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 router.post("/mark", verifyToken, markAttendance);
 

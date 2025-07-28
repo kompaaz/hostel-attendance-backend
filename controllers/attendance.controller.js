@@ -11,7 +11,6 @@ const markAttendance = async (req, res) => {
   console.log(records);
 
   const type = "general";
-  // const date = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
 
   if (!ad || !records || !type)
     return res.status(400).json({ error: "Missing fields" });
