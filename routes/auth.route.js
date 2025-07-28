@@ -30,12 +30,15 @@ router.get("/student_list", async (req, res) => {
 
 router.get("/display_attendance", async (req, res) => {
   try {
-    const attendance = await Attendance.find();
-    console.log(attendance);
-    
+    // const attendance = await Attendance.find();
+    const attendance = await Attendance.find()
+      .populate("ad", "username")
+      .sort({ date: -1 });
+    // console.log(JSON.stringify(attendance));
 
     // res.send("attendance");
-    res.render("attendance_list", { attendance });
+    // res.render("attendance_list", { attendance });
+    res.json({ "attendance-records": attendance });
   } catch (error) {
     console.error("Error fetching attendance:", error);
     res.status(500).send("Internal Server Error");
