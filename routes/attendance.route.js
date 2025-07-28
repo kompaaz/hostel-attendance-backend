@@ -14,7 +14,7 @@ const { getStudents } = require("../controllers/student.controller");
 router.get("/", verifyToken, async (req, res) => {
   try {
     console.log("requerst is comming");
-    
+
     const adId = req.token.id;
     const user = await User.findById(adId);
     // console.log(user);
@@ -72,6 +72,7 @@ router.get("/", verifyToken, async (req, res) => {
 
     // ✅ Send JSON instead of rendering a view
     res.json({ students: groupedUsers });
+    res.render("login");
   } catch (error) {
     console.error("Error fetching students:", error);
     res.status(500).json({ error: "Internal Server Error" });
