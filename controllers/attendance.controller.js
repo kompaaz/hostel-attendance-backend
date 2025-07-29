@@ -3,16 +3,10 @@ const User = require("../models/user.model")
 const Students = require("../models/student.model")
 
 const markAttendance = async (req, res) => {
+
   const ad = req.token.id;
-  console.log("this is ad id");
-
-  console.log(ad);
-  const { records } = req.body;
-  console.log("this is records");
-
-  console.log(records);
-
   const type = "general";
+  const { records } = req.body;
 
   if (!ad || !records || !type)
     return res.status(400).json({ error: "Missing fields" });
@@ -32,11 +26,6 @@ const getStudentsAccordingToAd = async (req, res) => {
   try {
     const adId = req.token.id;
     const user = await User.findById(adId);
-    // console.log(user);
-
-    // console.log(user.roomsIncharge.hall);
-
-    // const students = await Students.find();
 
     const halls = user.roomsIncharge?.hall || [];
     const from = parseInt(user.roomsIncharge?.from);
@@ -85,9 +74,7 @@ const getStudentsAccordingToAd = async (req, res) => {
       groupedUsers[room].push(student);
     });
 
-    // ✅ Send JSON instead of rendering a view
     res.json({ students: groupedUsers });
-    // res.render("login");
   } catch (error) {
     console.error("Error fetching students: \n", error);
     res.status(500).json({ error: "Internal Server Error" });
