@@ -87,7 +87,7 @@ const getStudentsAccordingToAd = async (req, res) => {
 
     // ✅ Send JSON instead of rendering a view
     res.json({ students: groupedUsers });
-    res.render("login");
+    // res.render("login");
   } catch (error) {
     console.error("Error fetching students: \n", error);
     res.status(500).json({ error: "Internal Server Error" });
