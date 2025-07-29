@@ -36,4 +36,14 @@ const userLogin = async (req, res) => {
   }
 };
 
-module.exports = { userLogin };
+const logout = (req, res) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: true, // ✅ Required on Vercel (HTTPS)
+    sameSite: "None", // ✅ Required for cross-origin cookie
+    maxAge: 0,
+  });
+  res.status(200).json({ message: "logout successfull" });
+};
+
+module.exports = { userLogin, logout };
