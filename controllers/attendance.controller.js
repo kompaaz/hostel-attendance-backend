@@ -1,9 +1,8 @@
 const Attendance = require("../models/attendance.model");
-const User = require("../models/user.model")
-const Students = require("../models/student.model")
+const User = require("../models/user.model");
+const Students = require("../models/student.model");
 
 const markAttendance = async (req, res) => {
-
   const ad = req.token.id;
   const type = "general";
   const { records } = req.body;
@@ -81,4 +80,21 @@ const getStudentsAccordingToAd = async (req, res) => {
   }
 };
 
-module.exports = { markAttendance, getStudentsAccordingToAd };
+const getAttendanceRecords = async (req, res) => {
+  try {
+    const attendance = await Attendance.find()
+      .populate("ad", "username")
+      .sort({ date: -1 });
+
+    res.status(200).json({ "attendance-records": attendance });
+  } catch (error) {
+    console.error("Error fetching attendance: \n", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports = {
+  markAttendance,
+  getStudentsAccordingToAd,
+  getAttendanceRecords,
+};
