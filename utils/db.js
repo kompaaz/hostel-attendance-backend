@@ -11,17 +11,22 @@ const connectDB = async () => {
 
     const URI = process.env.MONGO_URI;
     if (!URI) {
-      console.log("could not get connection URI db.js");
+      console.log("❌ Could not get connection URI from .env");
       throw new Error("URI not defined in .env");
     }
-    // console.log(URI);
+
     await mongoose.connect(URI);
-    isConnected = db.connections[0].readyState === 1;
-    console.log("SUCCESSFULLY CONNECTED TO DATABASE");
+
+    isConnected = mongoose.connections[0].readyState === 1;
+    if (isConnected) {
+      console.log("✅ Successfully connected to database");
+    } else {
+      console.log("⚠️ Database connection not ready");
+    }
   } catch (error) {
-    console.log(`Error in db.js while connecting to db`);
-    console.log(error);
-    // process.exit(1);
+    console.log(`❌ Error in db.js while connecting to DB`);
+    console.error(error);
+    // Optional: process.exit(1); to stop the app
   }
 };
 
