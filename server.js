@@ -1,7 +1,5 @@
 require("dotenv").config(); // Load environment variables
 const connectDB = require("./utils/db");
-connectDB();
-
 const express = require("express");
 // const mongoose = require("mongoose");
 const cors = require("cors");
@@ -14,21 +12,22 @@ const studentRoutes = require("./routes/students");
 const attendanceRoutes = require("./routes/attendance.route");
 
 const app = express();
+connectDB();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000", // Your frontend origin
-//     credentials: true, // Allow cookies
-//   })
-// );
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://sh.devnoel.org",
+];
+
 app.use(
   cors({
-    origin: "https://sh.devnoel.org", // Your frontend origin
-    credentials: true, // Allow cookies
+    origin: allowedOrigins,
+    credentials: true,
   })
 );
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
