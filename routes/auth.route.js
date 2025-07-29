@@ -17,13 +17,16 @@ router.get("/login", async (req, res) => {
 router.post("/login", isUserLoggedIn, userLogin);
 
 router.get("/logout", (req, res) => {
-  res.cookie("token", token, {
+
+  res.cookie("token", "", {
     httpOnly: true,
     secure: true, // ✅ Required on Vercel (HTTPS)
     sameSite: "None", // ✅ Required for cross-origin cookie
-    // maxAge: 86400000, // Optional: 1 day
+    maxAge: 0, // Optional: 1 day
   });
-  res.redirect("https://sh.devnoel.org/logout");
+  // res.redirect("https://sh.devnoel.org/logout");
+  // res.redirect("http://localhost:3000/logout");
+  res.status(200).json({ message: "logout successfull" });
 });
 
 router.get("/student_list", async (req, res) => {
