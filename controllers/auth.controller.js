@@ -23,20 +23,10 @@ const userLogin = async (req, res) => {
     const token = jwt.sign({ id: user._id }, JWT_SECRET);
     res.cookie("token", token, {
       httpOnly: true,
+      secure: true, // ✅ Required on Vercel (HTTPS)
+      sameSite: "None", // ✅ Required for cross-origin cookie
     });
 
-    // ✅ Login success
-    // res.status(200).json({
-    //   message: "Login successful",
-    //   user: {
-    //     id: user._id,
-    //     role: user.role,
-    //     hall: user.hall || null,
-    //   },
-    // });
-
-    // res.redirect("/api/attendance");
-    // res.redirect("https://sh.devnoel.org/attendance-records");
     res.status(200).json({
       message: "Login successful",
     });
@@ -46,4 +36,14 @@ const userLogin = async (req, res) => {
   }
 };
 
-module.exports = { userLogin };
+const logout = (req, res) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: true, // ✅ Required on Vercel (HTTPS)
+    sameSite: "None", // ✅ Required for cross-origin cookie
+    maxAge: 0,
+  });
+  res.status(200).json({ message: "logout successfull" });
+};
+
+module.exports = { userLogin, logout };

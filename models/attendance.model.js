@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const attendanceSchema = new mongoose.Schema({
   date: {
-    type: Date, // Store as native Date type
+    type: Date,
     required: true,
-    default: Date.now, // Optional default
-  }, // "YYYY-MM-DD"
+    default: Date.now, // "YYYY-MM-DD"
+  },
   ad: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // this should match the name of the model you have defined for ADs
+    ref: "User",
   },
   type: String, // "general" or "mass"
   records: [
