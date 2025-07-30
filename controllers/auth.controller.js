@@ -31,7 +31,8 @@ const userLogin = async (req, res) => {
       message: "Login successful",
       user: {
         id: user._id,
-        role: user.role,
+        username: user.username,
+        role: user.role, // ✅ Send role
       },
     });
   } catch (err) {
