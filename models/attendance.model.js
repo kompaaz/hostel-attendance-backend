@@ -14,6 +14,7 @@ const attendanceSchema = new mongoose.Schema({
   records: [
     {
       name: String,
+      roomNo: String,
       accountNumber: String,
       status: String, // "present" or "absent"
     },

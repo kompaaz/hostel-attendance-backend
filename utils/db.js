@@ -1,18 +1,32 @@
 const mongoose = require("mongoose");
 
+let isConnected = false;
+
 const connectDB = async () => {
   try {
-    const URI = process.env.MONGO_URI;
-    if(!URI){
-      console.log("could not get connection URI db.js");
-      throw new Error("URI not defined in .env")
+    if (isConnected) {
+      console.log("✅ Reusing existing database connection");
+      return;
     }
+
+    const URI = process.env.MONGO_URI;
+    if (!URI) {
+      console.log("❌ Could not get connection URI from .env");
+      throw new Error("URI not defined in .env");
+    }
+
     await mongoose.connect(URI);
-    console.log("SUCCESSFULLY CONNECTED TO DATABASE");
+
+    isConnected = mongoose.connections[0].readyState === 1;
+    if (isConnected) {
+      console.log("✅ Successfully connected to database");
+    } else {
+      console.log("⚠️ Database connection not ready");
+    }
   } catch (error) {
-    console.log(`Error in db.js while connecting to db`);
-    console.log(error);
-    process.exit(1);
+    console.log(`❌ Error in db.js while connecting to DB`);
+    console.error(error);
+    // Optional: process.exit(1); to stop the app
   }
 };
 
