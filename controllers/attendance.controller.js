@@ -75,7 +75,10 @@ const getStudentsAccordingToAd = async (req, res) => {
 
     res.json({ students: groupedUsers });
   } catch (error) {
-    console.error("Error fetching students: \n", error);
+    console.error(
+      "Error in Getting Students according to ad in attendace controller: \n",
+      error
+    );
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
