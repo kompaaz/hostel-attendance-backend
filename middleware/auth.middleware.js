@@ -4,7 +4,7 @@ const isUserLoggedIn = async (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (token) {
-      res.status(200).json({ message: "already logged In" });
+      return res.status(200).json({ message: "already logged In" });
     }
 
     next();
