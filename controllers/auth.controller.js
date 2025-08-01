@@ -20,28 +20,59 @@ const userLogin = async (req, res) => {
     }
 
     const JWT_SECRET = process.env.JWT_SECRET;
-    const token = jwt.sign({ id: user._id }, JWT_SECRET);
+    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET);
     res.cookie("token", token, {
       httpOnly: true,
+      secure: true, // ✅ Required on Vercel (HTTPS)
+      sameSite: "None",
+      maxAge: 60 * 60 * 10000,
     });
 
-    // ✅ Login success
-    // res.status(200).json({
-    //   message: "Login successful",
-    //   user: {
-    //     id: user._id,
-    //     role: user.role,
-    //     hall: user.hall || null,
-    //   },
-    // });
-
-    
-    // res.redirect("/api/attendance");
-    res.redirect("https://sh.devnoel.org/attendance-records");
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        // id: user._id,
+        // username: user.username,
+        role: user.role, // ✅ Send role
+      },
+    });
   } catch (err) {
     console.error("Error in userLogin controller \n", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-module.exports = { userLogin };
+const logout = (req, res) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: true, // ✅ Required on Vercel (HTTPS)
+    sameSite: "None", // ✅ Required for cross-origin cookie
+    maxAge: 0, // ✅ Set cookie expiration to 1 hour
+  });
+  res.status(200).json({ message: "logout successfull" });
+};
+
+const getMe = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("❌ Error in getMe controller:\n", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { userLogin, logout, getMe };

@@ -2,46 +2,35 @@ const express = require("express");
 const router = express.Router();
 const Students = require("../models/student.model");
 const Attendance = require("../models/attendance.model");
-const User = require("../models/user.model"); // For Assistant Director (AD) name
+const User = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 
 // middleware
-const { isUserLoggedIn } = require("../middleware/auth.middleware");
+const {
+  verifyToken,
+  isUserLoggedIn,
+} = require("../middleware/auth.middleware");
 
 // controllers
-const { userLogin } = require("../controllers/auth.controller");
+const { userLogin, logout, getMe } = require("../controllers/auth.controller");
 
 // login user
+router.get("/authenticate", (req, res) => {
+  const token = req.cookies.token;
+  if (token) {
+    return res
+      .status(200)
+      .json({ isLoggedIn: true, message: "User is already login" });
+  }
+  res.status(200).json({ isLoggedIn: false, message: "User is not logged in" });
+});
+
 router.get("/login", async (req, res) => {
   res.render("login");
 });
-router.post("/login", isUserLoggedIn, userLogin);
+router.post("/login", isUserLoggedIn, userLogin); // POST /api/auth/login
+router.get("/logout", logout); // GET /api/auth/logout
 
-router.get("/logout", (req, res) => {
-  res.cookie("token", "", {
-    maxAge: 0,
-  });
-  res.redirect("https://sh.devnoel.org/logout");
-});
-
-router.get("/student_list", async (req, res) => {
-  const students = await Students.find();
-  res.render("student_list", { users: students });
-});
-
-router.get("/display_attendance", async (req, res) => {
-  try {
-    // const attendance = await Attendance.find();
-    const attendance = await Attendance.find()
-      .populate("ad", "username")
-      .sort({ date: -1 });
-    // console.log(JSON.stringify(attendance));
-
-    // res.send("attendance");
-    // res.render("attendance_list", { attendance });
-    res.json({ "attendance-records": attendance });
-  } catch (error) {
-    console.error("Error fetching attendance:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+// 👇 Get current user
+router.get("/me", verifyToken, getMe); // ✅ Protected by token
 module.exports = router;

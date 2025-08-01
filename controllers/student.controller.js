@@ -1,5 +1,5 @@
 const Student = require("../models/student.model");
-
+// DONT KNOW WHY THIS ROUTE EXISTS
 const getStudents = async (req, res) => {
   try {
     console.log("trying to get students");
