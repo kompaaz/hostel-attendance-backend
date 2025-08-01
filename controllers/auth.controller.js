@@ -46,7 +46,7 @@ const logout = (req, res) => {
     httpOnly: true,
     secure: true, // ✅ Required on Vercel (HTTPS)
     sameSite: "None", // ✅ Required for cross-origin cookie
-    maxAge: 0,
+    maxAge: 60 * 60 * 1000 // ✅ Set cookie expiration to 1 hour
   });
   res.status(200).json({ message: "logout successfull" });
 };
