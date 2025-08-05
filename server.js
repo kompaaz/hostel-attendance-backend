@@ -14,8 +14,6 @@ const attendanceRoutes = require("./routes/attendance.route");
 const app = express();
 connectDB();
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
 const allowedOrigins = [
   "http://localhost:3000",
   "https://sh.devnoel.org",
