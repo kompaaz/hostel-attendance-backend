@@ -85,7 +85,10 @@ const getStudentsAccordingToAd = async (req, res) => {
 
 const getAttendanceRecords = async (req, res) => {
   try {
-    const attendance = await Attendance.find()
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 1);
+
+    const attendance = await Attendance.find({ date: { $gte: twoDaysAgo } })
       .populate("ad", "username")
       .sort({ date: -1 });
 
@@ -95,6 +98,7 @@ const getAttendanceRecords = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
 
 module.exports = {
   markAttendance,
