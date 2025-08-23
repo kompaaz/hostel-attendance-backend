@@ -33,6 +33,8 @@ const studentSchema = new mongoose.Schema(
     studentNo: {
       type: String,
     },
+    password: { type: String, required: true },
+    role: { type: String, enum: ["student"], required: true },
   },
   {
     timestamps: true,
