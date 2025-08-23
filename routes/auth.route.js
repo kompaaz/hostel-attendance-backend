@@ -17,13 +17,18 @@ const { userLogin, logout, getMe } = require("../controllers/auth.controller");
 // login user
 router.get("/authenticate", (req, res) => {
   const token = req.cookies.token;
+
   if (token) {
+    const data = jwt.verify(token, process.env.JWT_SECRET)
+    // console.log(data)
     return res
       .status(200)
-      .json({ isLoggedIn: true, message: "User is already login" });
+      .json({ isLoggedIn: true, role: data.role, message: "User is already login" });
   }
   res.status(200).json({ isLoggedIn: false, message: "User is not logged in" });
+
 });
+
 
 router.get("/login", async (req, res) => {
   res.render("login");
