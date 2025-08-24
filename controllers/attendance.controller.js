@@ -86,8 +86,8 @@ const getStudentsAccordingToAd = async (req, res) => {
 
     // Create a set of studentIds who are on leave
     const leaveStudentIds = new Set(approvedLeaves.map(l => l.student.toString()));
-    console.log("Students:", students.map(s => s._id.toString()));
-    console.log("Leave IDs:", Array.from(leaveStudentIds));
+    // console.log("Students:", students.map(s => s._id.toString()));
+    // console.log("Leave IDs:", Array.from(leaveStudentIds));
 
     // Group students by room and mark leave
     const groupedUsers = {};
