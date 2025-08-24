@@ -21,7 +21,7 @@ const userLogin = async (req, res) => {
     // 1. Check in User collection (admins)
     account = await User.findOne({ username });
     if (account) {
-      roleType = "ad";
+      roleType = account.role;
       const isMatch = await bcrypt.compare(password, account.password);
       if (!isMatch) {
         return res.status(400).json({ message: "Invalid credentials" });
@@ -31,7 +31,7 @@ const userLogin = async (req, res) => {
 
     // 2. If not found in User, check Student collection
     if (!account) {
-      account = await Student.findOne({ name: username });
+      account = await Student.findOne({ dNo: username });
       if (account) {
         roleType = "student";
         if (account.password !== password) {
