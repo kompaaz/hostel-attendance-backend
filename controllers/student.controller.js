@@ -76,7 +76,7 @@ const getAttendanceByStudent = async (req, res) => {
       }
     ]);
 
-    console.log(JSON.stringify(attendanceDocs));
+    // console.log(JSON.stringify(attendanceDocs));
 
     const filteredAttendance = attendanceDocs.map((entry) => ({
       date: entry.date,
@@ -84,7 +84,7 @@ const getAttendanceByStudent = async (req, res) => {
       status: entry.records[0]?.status || "N/A",
     }));
 
-    console.log(JSON.stringify(filteredAttendance));
+    // console.log(JSON.stringify(filteredAttendance));
     res.status(200).json({ student, attendance: filteredAttendance });
   } catch (error) {
     console.error("❌ Error fetching attendance:", error);
