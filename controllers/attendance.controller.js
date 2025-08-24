@@ -98,6 +98,9 @@ const getStudentsAccordingToAd = async (req, res) => {
       groupedUsers[room].push({
         ...student,
         leave: leaveStudentIds.has(student._id.toString()) ? true : false,
+        status: leaveStudentIds.has(student._id.toString())
+          ? "leave"
+          : "present",
       });
     });
 
