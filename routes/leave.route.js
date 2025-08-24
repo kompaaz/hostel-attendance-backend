@@ -274,11 +274,14 @@ router.get("/ad/leaves", verifyToken, async (req, res) => {
                     student: { name: 1, accNo: 1, roomNo: 1 },
                     reason: 1,
                     appliedAt: 1,
-                    status: 1
+                    status: 1,
+                    fromDate: 1,   // ✅ include fromDate
+                    toDate: 1      // ✅ include toDate
                 }
             },
             { $sort: { appliedAt: -1 } }
         ]);
+
 
         res.json({ success: true, leaves });
     } catch (err) {
