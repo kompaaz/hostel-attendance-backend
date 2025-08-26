@@ -6,7 +6,7 @@ const Student = require("../models/student.model");
 const userLogin = async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log("🟢 Login request:", username, password);
+    // console.log("🟢 Login request:", username, password);
     // ✅ Find the user in the database
     // const user = await User.findOne({ username });
     // const student = await Student.findOne({ name: username });

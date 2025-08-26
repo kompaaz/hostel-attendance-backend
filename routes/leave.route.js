@@ -50,7 +50,7 @@ router.post("/", verifyToken, async (req, res) => {
 // 📌 Get my leave requests - FIXED VERSION
 router.get("/my-requests", verifyToken, async (req, res) => {
     try {
-        console.log("Fetching leave requests for student:", req.token.id);
+        // console.log("Fetching leave requests for student:", req.token.id);
 
         // Since your Leave model references "User", but you're using student ID
         // We need to check what model your student IDs actually belong to
@@ -112,11 +112,11 @@ router.post("/apply", verifyToken, async (req, res) => {
 // 📌 Director approves/rejects leave - FIXED VERSION
 router.post("/:leaveId/action", verifyToken, async (req, res) => {
     try {
-        console.log("Director action request:", {
-            leaveId: req.params.leaveId,
-            body: req.body,
-            token: req.token
-        });
+        // console.log("Director action request:", {
+        //     leaveId: req.params.leaveId,
+        //     body: req.body,
+        //     token: req.token
+        // });
 
         const { leaveId } = req.params;
         const { action, rejectionReason, assignedAD } = req.body;
@@ -128,11 +128,11 @@ router.post("/:leaveId/action", verifyToken, async (req, res) => {
 
         const leave = await Leave.findById(leaveId);
         if (!leave) {
-            console.log("Leave not found:", leaveId);
+            // console.log("Leave not found:", leaveId);
             return res.status(404).json({ error: "Leave not found" });
         }
 
-        console.log("Current leave status:", leave.status);
+        // console.log("Current leave status:", leave.status);
 
         if (action === "approve") {
             // For approve action, assignedAD is optional but recommended
@@ -141,7 +141,7 @@ router.post("/:leaveId/action", verifyToken, async (req, res) => {
             leave.assignedAD = assignedAD || null; // Handle case where assignedAD is not provided
             leave.approvedByDirector = true; // Update the schema field
 
-            console.log("Approving leave with AD:", assignedAD);
+            // console.log("Approving leave with AD:", assignedAD);
         } else if (action === "reject") {
             if (!rejectionReason) {
                 return res.status(400).json({ error: "Rejection reason is required" });
@@ -150,13 +150,13 @@ router.post("/:leaveId/action", verifyToken, async (req, res) => {
             leave.rejectionReason = rejectionReason;
             leave.director = req.token.id;
 
-            console.log("Rejecting leave with reason:", rejectionReason);
+            // console.log("Rejecting leave with reason:", rejectionReason);
         } else {
             return res.status(400).json({ error: "Invalid action. Use 'approve' or 'reject'" });
         }
 
         await leave.save();
-        console.log("Leave updated successfully:", leave.status);
+        // console.log("Leave updated successfully:", leave.status);
 
         res.json({
             success: true,
@@ -203,7 +203,7 @@ router.get("/all", verifyToken, async (req, res) => {
             .populate("director", "name")
             .populate("assignedAD", "name")
             .sort({ appliedAt: -1 });
-        console.log(leaves)
+        // console.log(leaves)
         res.json({ success: true, leaves });
 
     } catch (err) {

@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const Attendance = require("../models/attendance.model");
 const getStudents = async (req, res) => {
   try {
-    console.log("trying to get students");
+    // console.log("trying to get students");
     const adId = req.query.adId;
     const students = await Student.find({ assignedAd: adId });
     res.json({ students });
