@@ -117,19 +117,37 @@ const getStudentsAccordingToAd = async (req, res) => {
 
 const getAttendanceRecords = async (req, res) => {
   try {
-    const twoDaysAgo = new Date();
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 1);
+    const adId = req.token.id; // ✅ This comes from cookie (via verifyToken middleware)
+    const { from, to } = req.query;
 
-    const attendance = await Attendance.find({ date: { $gte: twoDaysAgo } })
+    // Date filters (optional)
+    const match = { ad: adId }; // ✅ filter to only logged-in AD
+
+    if (from && to) {
+      match.date = {
+        $gte: new Date(from),
+        $lte: new Date(to),
+      };
+    }
+
+    console.log(match);
+    const attendance = await Attendance.find(match)
       .populate("ad", "username")
       .sort({ date: -1 });
 
+
+    console.log(JSON.stringify(attendance, null, 2));
     res.status(200).json({ "attendance-records": attendance });
   } catch (error) {
     console.error("Error fetching attendance: \n", error);
     res.status(500).send("Internal Server Error");
   }
 };
+
+
+
+
+
 
 
 module.exports = {
