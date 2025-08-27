@@ -12,9 +12,12 @@ const {
 } = require("../controllers/attendance.controller");
 // const { getStudents } = require("../controllers/student.controller");
 
+
+
 router.get("/", verifyToken, getStudentsAccordingToAd); // POST /api/attendance/
 router.post("/mark", verifyToken, markAttendance); // POST /api/attendance/mark
-router.get("/get-attendance-records", getAttendanceRecords); // GET /api/attendance/get-attendance-records
+router.get("/get-attendance-records", verifyToken, getAttendanceRecords);
+// GET /api/attendance/get-attendance-records
 // router.get("/students", getStudents); // GET: Fetch all students based on adId
 
 module.exports = router;
