@@ -3,6 +3,25 @@ const User = require("../models/user.model");
 const Students = require("../models/student.model");
 const Leave = require("../models/leave.model");
 
+// const markAttendance = async (req, res) => {
+//   const ad = req.token.id;
+//   const type = "general";
+//   const { records } = req.body;
+
+//   if (!ad || !records || !type)
+//     return res.status(400).json({ error: "Missing fields" });
+
+//   try {
+//     const attendance = new Attendance({ ad, type, records });
+//     attendance.save();
+
+//     res.json({ message: "Attendance saved successfully" });
+//   } catch (err) {
+//     console.log("Error in attendance.controller.js \n" + err);
+//     res.status(500).json({ error: "Failed to save attendance" });
+//   }
+// };
+
 const markAttendance = async (req, res) => {
   const ad = req.token.id;
   const type = "general";
@@ -12,8 +31,29 @@ const markAttendance = async (req, res) => {
     return res.status(400).json({ error: "Missing fields" });
 
   try {
-    const attendance = new Attendance({ ad, type, records });
-    attendance.save();
+    // ✅ Define start and end of today
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    // ✅ Check if attendance already exists for today
+    const existingAttendance = await Attendance.findOne({
+      ad,
+      type,
+      date: { $gte: todayStart, $lte: todayEnd },
+    });
+
+    if (existingAttendance) {
+      return res.status(400).json({
+        error: "Attendance for today has already been submitted",
+      });
+    }
+
+    // ✅ Save new attendance
+    const attendance = new Attendance({ ad, type, records, date: new Date() });
+    await attendance.save();
 
     res.json({ message: "Attendance saved successfully" });
   } catch (err) {
@@ -21,6 +61,7 @@ const markAttendance = async (req, res) => {
     res.status(500).json({ error: "Failed to save attendance" });
   }
 };
+
 
 const getStudentsAccordingToAd = async (req, res) => {
   try {
