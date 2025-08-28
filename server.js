@@ -1,7 +1,7 @@
 require("dotenv").config(); // Load environment variables
 const connectDB = require("./utils/db");
 const express = require("express");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
@@ -10,6 +10,7 @@ const path = require("path");
 const authRoutes = require("./routes/auth.route");
 const studentRoutes = require("./routes/students");
 const attendanceRoutes = require("./routes/attendance.route");
+const leaveRoutes = require("./routes/leave.route");
 
 const app = express();
 connectDB();
@@ -17,6 +18,7 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://sh.devnoel.org",
+  "https://sh-frontend-dev.jwstechnologies.com",
 ];
 
 app.use(
@@ -34,6 +36,7 @@ app.use(express.static("public"));
 app.use("/api/auth", authRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/attendance", attendanceRoutes);
+app.use("/api/leave", leaveRoutes);
 
 // mongoose
 //   .connect(process.env.MONGO_URI, {

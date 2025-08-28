@@ -1,26 +1,74 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const Student = require("../models/student.model");
 
 const userLogin = async (req, res) => {
   try {
     const { username, password } = req.body;
-
+    // console.log("🟢 Login request:", username, password);
     // ✅ Find the user in the database
-    const user = await User.findOne({ username });
+    // const user = await User.findOne({ username });
+    // const student = await Student.findOne({ name: username });
 
-    if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+    let account = null;
+    let roleType = "";
+
+    // if (!user) {
+    //   return res.status(400).json({ message: "Invalid credentials" });
+    // }
+
+    // 1. Check in User collection (admins)
+    account = await User.findOne({ username });
+    if (account) {
+      roleType = account.role;
+      const isMatch = await bcrypt.compare(password, account.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
     }
+
+
+    // 2. If not found in User, check Student collection
+    if (!account) {
+      account = await Student.findOne({ dNo: username });
+      if (account) {
+        roleType = "student";
+        if (account.password !== password) {
+          return res.status(400).json({ message: "Invalid credentials" });
+        }
+      }
+    }
+
+    // 3. If still not found
+    if (!account) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    // 4. Compare password
+    // const isMatch = await bcrypt.compare(password, account.password);
+    // if (!isMatch) {
+    //   return res.status(400).json({ message: "Invalid credentials (wrong password)" });
+    // }
 
     // ✅ Compare hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch) {
+    //   return res.status(400).json({ message: "Invalid credentials" });
+    // }
 
+    // const JWT_SECRET = process.env.JWT_SECRET;
+    // const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET);
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: true, // ✅ Required on Vercel (HTTPS)
+    //   sameSite: "None",
+    //   maxAge: 60 * 60 * 10000,
+    // });
+
+    // 4. Generate JWT
     const JWT_SECRET = process.env.JWT_SECRET;
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET);
+    const token = jwt.sign({ id: account._id, role: roleType }, JWT_SECRET);
     res.cookie("token", token, {
       httpOnly: true,
       secure: true, // ✅ Required on Vercel (HTTPS)
@@ -28,14 +76,25 @@ const userLogin = async (req, res) => {
       maxAge: 60 * 60 * 10000,
     });
 
+    // res.status(200).json({
+    //   message: "Login successful",
+    //   user: {
+    //     // id: user._id,
+    //     // username: user.username,
+    //     role: user.role, // ✅ Send role
+    //   },
+    // });
+
     res.status(200).json({
       message: "Login successful",
       user: {
-        // id: user._id,
-        // username: user.username,
-        role: user.role, // ✅ Send role
+        id: account._id,
+        username: account.username || account.name, // admin uses username, student uses name
+        role: roleType,
       },
     });
+
+
   } catch (err) {
     console.error("Error in userLogin controller \n", err);
     res.status(500).json({ message: "Server error" });
@@ -62,13 +121,27 @@ const getMe = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findById(decoded.id).select("-password");
+    // const user = await User.findById(decoded.id).select("-password");
+
+    // if (!user) {
+    //   return res.status(404).json({ message: "User not found" });
+    // }
+
+    // res.status(200).json(user);
+
+    let user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      user = await Student.findById(decoded.id).select("-password");
+    }
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     res.status(200).json(user);
+
+
   } catch (error) {
     console.error("❌ Error in getMe controller:\n", error);
     res.status(500).json({ message: "Server error" });

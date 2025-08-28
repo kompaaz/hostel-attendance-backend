@@ -3,8 +3,10 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middleware/auth.middleware");
 const Student = require("../models/student.model");
+const { getAttendanceByStudent } = require("../controllers/student.controller");
 
 // GET all students for a specific AD
+
 router.get("/", verifyToken, async (req, res) => {
   try {
     const adUsername = req.user.username;
@@ -14,5 +16,7 @@ router.get("/", verifyToken, async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+router.get("/getAttendanceByStudent", verifyToken, getAttendanceByStudent);
 
 module.exports = router;
