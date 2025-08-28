@@ -171,13 +171,13 @@ const getAttendanceRecords = async (req, res) => {
       };
     }
 
-    console.log(match);
+    // console.log(match);
     const attendance = await Attendance.find(match)
       .populate("ad", "username")
       .sort({ date: -1 });
 
 
-    console.log(JSON.stringify(attendance, null, 2));
+    // console.log(JSON.stringify(attendance, null, 2));
     res.status(200).json({ "attendance-records": attendance });
   } catch (error) {
     console.error("Error fetching attendance: \n", error);
