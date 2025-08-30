@@ -182,6 +182,70 @@ const getAttendanceRecords = async (req, res) => {
   }
 };
 
+const updateStudentRoom = async (req, res) => {
+  try {
+    const adId = req.token.id;
+    const { studentId, newRoomNo, newBlock } = req.body;
+
+    if (!studentId || !newRoomNo) {
+      return res.status(400).json({ error: "Student ID and new room number are required" });
+    }
+
+    // ✅ Check AD permission
+    const user = await User.findById(adId);
+    if (!user || !user.roomsIncharge || user.roomsIncharge.length === 0) {
+      return res.status(403).json({ error: "Not authorized to update student rooms" });
+    }
+
+    const student = await Students.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    // ✅ Check if student belongs to AD’s assigned range
+    let authorized = false;
+    for (const range of user.roomsIncharge) {
+      const from = parseInt(range.from);
+      const to = parseInt(range.to);
+
+      if (
+        range.block === student.block &&
+        !isNaN(from) && !isNaN(to) &&
+        student.roomNo.match(/^\d+$/) && // numeric room
+        parseInt(student.roomNo) >= from &&
+        parseInt(student.roomNo) <= to
+      ) {
+        authorized = true;
+        break;
+      }
+    }
+
+    if (!authorized) {
+      return res.status(403).json({ error: "You are not authorized to change this student’s room" });
+    }
+
+    // ✅ Update student room
+    student.roomNo = newRoomNo;
+
+    if (newBlock && newBlock.trim() !== "") {
+      student.block = newBlock; // only if provided
+    }
+
+    if (/^\d+$/.test(newRoomNo)) {
+      student.numericRoom = parseInt(newRoomNo);
+    } else {
+      student.numericRoom = null; // hall-based room
+    }
+
+    await student.save();
+
+    res.json({ message: "Room updated successfully", student });
+  } catch (error) {
+    console.error("Error updating student room: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 
 
@@ -192,4 +256,5 @@ module.exports = {
   markAttendance,
   getStudentsAccordingToAd,
   getAttendanceRecords,
+  updateStudentRoom
 };
