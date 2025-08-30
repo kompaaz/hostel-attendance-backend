@@ -4,11 +4,14 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["director", "ad", "admin"], required: true },
-  roomsIncharge: {
-    hall: [],
-    from: Number, // start room number
-    to: Number, // end room number
-  },
+  roomsIncharge: [
+    {
+      block: { type: String, required: true },
+      hall: { type: [String], default: [] }, // optional hall list
+      from: { type: Number }, // start room number
+      to: { type: Number },   // end room number
+    }
+  ],
   createdAt: { type: Date, default: Date.now },
 });
 

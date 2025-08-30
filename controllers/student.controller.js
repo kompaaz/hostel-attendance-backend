@@ -1,17 +1,17 @@
 const Student = require("../models/student.model");
 const jwt = require("jsonwebtoken");
 const Attendance = require("../models/attendance.model");
-const getStudents = async (req, res) => {
-  try {
-    // console.log("trying to get students");
-    const adId = req.query.adId;
-    const students = await Student.find({ assignedAd: adId });
-    res.json({ students });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching students" });
-  }
-};
+// const getStudents = async (req, res) => {
+//   try {
+//     // console.log("trying to get students");
+//     const adId = req.query.adId;
+//     const students = await Student.find({ assignedAd: adId });
+//     res.json({ students });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Error fetching students" });
+//   }
+// };
 
 const getMe = async (req, res) => {
   try {
@@ -94,4 +94,4 @@ const getAttendanceByStudent = async (req, res) => {
 
 
 
-module.exports = { getStudents, getMe, getAttendanceByStudent };
+module.exports = { getMe, getAttendanceByStudent };

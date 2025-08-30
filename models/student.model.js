@@ -17,6 +17,7 @@ const studentSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    block: { type: String, required: true, trim: true },
     roomNo: {
       type: String,
       required: true,
