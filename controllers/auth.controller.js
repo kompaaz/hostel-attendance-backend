@@ -102,13 +102,12 @@ const userLogin = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.cookie("token", "", {
+  res.clearCookie("token", {
     httpOnly: true,
-    secure: true, // ✅ Required on Vercel (HTTPS)
-    sameSite: "None", // ✅ Required for cross-origin cookie
-    maxAge: 0, // ✅ Set cookie expiration to 1 hour
+    secure: true,       // must match what you used in login
+    sameSite: "None",   // must match what you used in login
   });
-  res.status(200).json({ message: "logout successfull" });
+  res.status(200).json({ message: "Logout successful" });
 };
 
 const getMe = async (req, res) => {
