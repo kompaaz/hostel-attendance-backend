@@ -55,16 +55,6 @@ const userLogin = async (req, res) => {
     //   maxAge: 60 * 60 * 10000,
     // });
 
-    // 4. Generate JWT
-    const JWT_SECRET = process.env.JWT_SECRET;
-    const token = jwt.sign({ id: account._id, role: roleType }, JWT_SECRET);
-    // res.cookie("token", token, {
-    //   httpOnly: true,
-    //   secure: true, // ✅ Required on Vercel (HTTPS)
-    //   sameSite: "None",
-    //   maxAge: 60 * 60 * 10000,
-    // });
-
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
