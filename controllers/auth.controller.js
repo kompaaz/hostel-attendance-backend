@@ -45,45 +45,16 @@ const userLogin = async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
 
-    // 4. Compare password
-    // const isMatch = await bcrypt.compare(password, account.password);
-    // if (!isMatch) {
-    //   return res.status(400).json({ message: "Invalid credentials (wrong password)" });
-    // }
-
-    // ✅ Compare hashed password
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //   return res.status(400).json({ message: "Invalid credentials" });
-    // }
-
-    // const JWT_SECRET = process.env.JWT_SECRET;
-    // const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET);
-    // res.cookie("token", token, {
-    //   httpOnly: true,
-    //   secure: true, // ✅ Required on Vercel (HTTPS)
-    //   sameSite: "None",
-    //   maxAge: 60 * 60 * 10000,
-    // });
-
-    // 4. Generate JWT
+    // 4. Generate JWT and set token
     const JWT_SECRET = process.env.JWT_SECRET;
     const token = jwt.sign({ id: account._id, role: roleType }, JWT_SECRET);
     res.cookie("token", token, {
       httpOnly: true,
       secure: true, // ✅ Required on Vercel (HTTPS)
-      sameSite: "None",
+      sameSite: "none",
+      domain: ".devnoel.org",
       maxAge: 60 * 60 * 10000,
     });
-
-    // res.status(200).json({
-    //   message: "Login successful",
-    //   user: {
-    //     // id: user._id,
-    //     // username: user.username,
-    //     role: user.role, // ✅ Send role
-    //   },
-    // });
 
     res.status(200).json({
       message: "Login successful",
@@ -105,7 +76,9 @@ const logout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: true, // true only in production
-    sameSite: "None",
+    // sameSite: "sh.devnoel.org",
+    domain: ".devnoel.org",
+    sameSite: "none",
     path: "/",  // important!
   });
   res.status(200).json({ message: "Logout successful" });
