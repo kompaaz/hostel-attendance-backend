@@ -48,12 +48,30 @@ const userLogin = async (req, res) => {
     // 4. Generate JWT and set token
     const JWT_SECRET = process.env.JWT_SECRET;
     const token = jwt.sign({ id: account._id, role: roleType }, JWT_SECRET);
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: true, // ✅ Required on Vercel (HTTPS)
+    //   sameSite: "None",
+    //   maxAge: 60 * 60 * 10000,
+    // });
+
+    // 4. Generate JWT
+    const JWT_SECRET = process.env.JWT_SECRET;
+    const token = jwt.sign({ id: account._id, role: roleType }, JWT_SECRET);
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: true, // ✅ Required on Vercel (HTTPS)
+    //   sameSite: "None",
+    //   maxAge: 60 * 60 * 10000,
+    // });
+
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // ✅ Required on Vercel (HTTPS)
-      sameSite: "none",
-      domain: ".devnoel.org",
-      maxAge: 60 * 60 * 10000,
+      secure: true,
+      sameSite: "None",
+      domain: ".devnoel.org",   // 👈 share across subdomains
+      path: "/",
+      maxAge: 60 * 60 * 1000,   // 1 hour
     });
 
     res.status(200).json({
@@ -73,6 +91,7 @@ const userLogin = async (req, res) => {
 };
 
 const logout = (req, res) => {
+
   res.clearCookie("token", {
     httpOnly: true,
     secure: true, // true only in production
