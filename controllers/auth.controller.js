@@ -89,6 +89,7 @@ const logout = (req, res) => {
     domain: ".devnoel.org",
     sameSite: "none",
     path: "/",  // important!
+    expires: new Date(0), //trying
   });
   res.status(200).json({ message: "Logout successful" });
 };
