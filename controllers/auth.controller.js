@@ -4,8 +4,10 @@ const User = require("../models/user.model");
 const Student = require("../models/student.model");
 
 const userLogin = async (req, res) => {
+  console.log("Came")
   try {
     const { username, password } = req.body;
+    console.log(username, password)
     // console.log("🟢 Login request:", username, password);
     // ✅ Find the user in the database
     // const user = await User.findOne({ username });
@@ -20,6 +22,7 @@ const userLogin = async (req, res) => {
 
     // 1. Check in User collection (admins)
     account = await User.findOne({ username });
+    console.log(account)
     if (account) {
       roleType = account.role;
       const isMatch = await bcrypt.compare(password, account.password);
@@ -48,18 +51,12 @@ const userLogin = async (req, res) => {
     // 4. Generate JWT and set token
     const JWT_SECRET = process.env.JWT_SECRET;
     const token = jwt.sign({ id: account._id, role: roleType }, JWT_SECRET);
-    // res.cookie("token", token, {
-    //   httpOnly: true,
-    //   secure: true, // ✅ Required on Vercel (HTTPS)
-    //   sameSite: "None",
-    //   maxAge: 60 * 60 * 10000,
-    // });
-
+    console.log("setttihng toiken")
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
-      domain: ".devnoel.org",   // 👈 share across subdomains
+      // domain: ".devnoel.org",   // 👈 share across subdomains
       path: "/",
       maxAge: 60 * 60 * 1000,   // 1 hour
     });
@@ -82,14 +79,22 @@ const userLogin = async (req, res) => {
 
 const logout = (req, res) => {
 
-  res.clearCookie("token", {
+  res.cookie("lol", "", {
     httpOnly: true,
-    secure: true, // true only in production
-    // sameSite: "sh.devnoel.org",
-    domain: ".devnoel.org",
-    sameSite: "none",
-    path: "/",  // important!
+    secure: true,
+    sameSite: "None",
+    // domain: ".devnoel.org",   // 👈 share across subdomains
+    path: "/",
+    maxAge: 0,   // 1 hour
   });
+  // res.clearCookie("token", {
+  //   httpOnly: true,
+  //   secure: true, // true only in production
+  //   // sameSite: "sh.devnoel.org",
+  //   domain: ".devnoel.org",
+  //   sameSite: "none",
+  //   path: "/",  // important!
+  // });
   res.status(200).json({ message: "Logout successful" });
 };
 
