@@ -4,25 +4,13 @@ const User = require("../models/user.model");
 const Student = require("../models/student.model");
 
 const userLogin = async (req, res) => {
-  console.log("Came")
   try {
     const { username, password } = req.body;
-    console.log(username, password)
-    // console.log("🟢 Login request:", username, password);
-    // ✅ Find the user in the database
-    // const user = await User.findOne({ username });
-    // const student = await Student.findOne({ name: username });
-
     let account = null;
     let roleType = "";
 
-    // if (!user) {
-    //   return res.status(400).json({ message: "Invalid credentials" });
-    // }
-
     // 1. Check in User collection (admins)
     account = await User.findOne({ username });
-    console.log(account)
     if (account) {
       roleType = account.role;
       const isMatch = await bcrypt.compare(password, account.password);
@@ -30,7 +18,6 @@ const userLogin = async (req, res) => {
         return res.status(400).json({ message: "Invalid credentials" });
       }
     }
-
 
     // 2. If not found in User, check Student collection
     if (!account) {
@@ -51,12 +38,10 @@ const userLogin = async (req, res) => {
     // 4. Generate JWT and set token
     const JWT_SECRET = process.env.JWT_SECRET;
     const token = jwt.sign({ id: account._id, role: roleType }, JWT_SECRET);
-    console.log("setttihng toiken")
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
-      // domain: ".devnoel.org",   // 👈 share across subdomains
       path: "/",
       maxAge: 60 * 60 * 1000,   // 1 hour
     });
@@ -65,11 +50,10 @@ const userLogin = async (req, res) => {
       message: "Login successful",
       user: {
         id: account._id,
-        username: account.username || account.name, // admin uses username, student uses name
+        username: account.username || account.name,
         role: roleType,
       },
     });
-
 
   } catch (err) {
     console.error("Error in userLogin controller \n", err);
@@ -83,18 +67,9 @@ const logout = (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "None",
-    // domain: ".devnoel.org",   // 👈 share across subdomains
     path: "/",
-    maxAge: 0,   // 1 hour
+    maxAge: 0,
   });
-  // res.clearCookie("token", {
-  //   httpOnly: true,
-  //   secure: true, // true only in production
-  //   // sameSite: "sh.devnoel.org",
-  //   domain: ".devnoel.org",
-  //   sameSite: "none",
-  //   path: "/",  // important!
-  // });
   res.status(200).json({ message: "Logout successful" });
 };
 
@@ -107,14 +82,6 @@ const getMe = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // const user = await User.findById(decoded.id).select("-password");
-
-    // if (!user) {
-    //   return res.status(404).json({ message: "User not found" });
-    // }
-
-    // res.status(200).json(user);
 
     let user = await User.findById(decoded.id).select("-password");
 
