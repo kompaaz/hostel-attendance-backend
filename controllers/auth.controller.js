@@ -79,7 +79,7 @@ const userLogin = async (req, res) => {
 
 const logout = (req, res) => {
 
-  res.cookie("lol", "", {
+  res.cookie("token", "", {
     httpOnly: true,
     secure: true,
     sameSite: "None",
