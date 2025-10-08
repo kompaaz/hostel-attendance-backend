@@ -155,34 +155,57 @@ const getStudentsAccordingToAd = async (req, res) => {
 
 const getAttendanceRecords = async (req, res) => {
   try {
-    const adId = req.token.id; // ✅ This comes from cookie (via verifyToken middleware)
-    const { from, to } = req.query;
+    const adId = req.token.id;
+    const { from, to, days, limit } = req.query;
 
-    // Date filters (optional)
-    const match = { ad: adId }; // ✅ filter to only logged-in AD
+    // base match to only AD's records
+    const match = { ad: adId };
 
+    // 1) If explicit from & to provided -> use them
     if (from && to) {
-      match.date = {
-        $gte: new Date(from),
-        $lte: new Date(to),
-      };
+      const fromDate = new Date(from);
+      const toDate = new Date(to);
+      if (isNaN(fromDate) || isNaN(toDate)) {
+        return res.status(400).json({ error: "Invalid from/to dates" });
+      }
+      match.date = { $gte: fromDate, $lte: toDate };
+    } else if (days) {
+      // 2) If days param provided -> last 'days' days (inclusive)
+      const daysCount = parseInt(days, 10);
+      if (isNaN(daysCount) || daysCount <= 0) {
+        return res.status(400).json({ error: "Invalid days parameter" });
+      }
+      const end = new Date();
+      end.setHours(23, 59, 59, 999);
+      const start = new Date();
+      start.setDate(start.getDate() - (daysCount - 1)); // e.g. days=1 => today only
+      start.setHours(0, 0, 0, 0);
+      match.date = { $gte: start, $lte: end };
     }
+    // else: no date filter -> return all (or use limit below)
 
-
-
-    // console.log(match);
-    const attendance = await Attendance.find(match)
+    // Build query
+    let query = Attendance.find(match)
       .populate("ad", "username")
       .sort({ date: -1 });
 
+    // 3) If limit param provided -> limit the number of documents returned
+    if (limit) {
+      const lim = parseInt(limit, 10);
+      if (isNaN(lim) || lim <= 0) {
+        return res.status(400).json({ error: "Invalid limit parameter" });
+      }
+      query = query.limit(lim);
+    }
 
-    // console.log(JSON.stringify(attendance, null, 2));
+    const attendance = await query.exec();
     res.status(200).json({ "attendance-records": attendance });
   } catch (error) {
     console.error("Error fetching attendance: \n", error);
     res.status(500).send("Internal Server Error");
   }
 };
+
 
 const updateStudentRoom = async (req, res) => {
   try {
