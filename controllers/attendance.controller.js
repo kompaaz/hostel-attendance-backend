@@ -156,55 +156,33 @@ const getStudentsAccordingToAd = async (req, res) => {
 const getAttendanceRecords = async (req, res) => {
   try {
     const adId = req.token.id;
-    const { from, to, days, limit } = req.query;
 
-    // base match to only AD's records
-    const match = { ad: adId };
+    // Calculate last 5 days range (inclusive of today)
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
 
-    // 1) If explicit from & to provided -> use them
-    if (from && to) {
-      const fromDate = new Date(from);
-      const toDate = new Date(to);
-      if (isNaN(fromDate) || isNaN(toDate)) {
-        return res.status(400).json({ error: "Invalid from/to dates" });
-      }
-      match.date = { $gte: fromDate, $lte: toDate };
-    } else if (days) {
-      // 2) If days param provided -> last 'days' days (inclusive)
-      const daysCount = parseInt(days, 10);
-      if (isNaN(daysCount) || daysCount <= 0) {
-        return res.status(400).json({ error: "Invalid days parameter" });
-      }
-      const end = new Date();
-      end.setHours(23, 59, 59, 999);
-      const start = new Date();
-      start.setDate(start.getDate() - (daysCount - 1)); // e.g. days=1 => today only
-      start.setHours(0, 0, 0, 0);
-      match.date = { $gte: start, $lte: end };
-    }
-    // else: no date filter -> return all (or use limit below)
+    const start = new Date();
+    start.setDate(start.getDate() - 4); // 4 days back + today = 5 days
+    start.setHours(0, 0, 0, 0);
 
-    // Build query
-    let query = Attendance.find(match)
+    // Build match for this AD and the 5-day window
+    const match = {
+      ad: adId,
+      date: { $gte: start, $lte: end },
+    };
+
+    const attendance = await Attendance.find(match)
       .populate("ad", "username")
-      .sort({ date: -1 });
+      .sort({ date: -1 })
+      .exec();
 
-    // 3) If limit param provided -> limit the number of documents returned
-    if (limit) {
-      const lim = parseInt(limit, 10);
-      if (isNaN(lim) || lim <= 0) {
-        return res.status(400).json({ error: "Invalid limit parameter" });
-      }
-      query = query.limit(lim);
-    }
-
-    const attendance = await query.exec();
     res.status(200).json({ "attendance-records": attendance });
   } catch (error) {
     console.error("Error fetching attendance: \n", error);
     res.status(500).send("Internal Server Error");
   }
 };
+
 
 
 const updateStudentRoom = async (req, res) => {
